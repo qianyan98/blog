@@ -1,0 +1,380 @@
+/************************* Header **************************/
+
+/* header-隐藏顶部线条 */
+.headband {
+  display: none;
+}
+
+/* header-顶部空白 */
+.header, .main-inner {
+  margin-top: 10px;
+
+  +mobile() {
+    margin-top: 0;
+  }
+}
+
+/* 圆角 */
+.header-inner, ///顶部圆角
+.sidebar-inner { //侧边头像圆角
+  border-radius: $myradius;
+}
+
+.site-brand-container {
+  border-radius: $myradius $myradius 0 0;
+
+  +mobile() {
+    border-radius: 0 0 $myradius $myradius;
+  }
+}
+
+/************************* 整个页面 **************************/
+  
+//页面背景
+body {
+    background:url(https://cdn.makiru.top/images/body-bg.png);
+    background-repeat: no-repeat;
+    background-attachment:fixed; //不重复
+    background-size: cover;      //填充
+    background-position:50% 50%;
+}
+
+//博客内容透明化
+.content-wrap {
+  opacity: 0.9;
+}
+
+
+//搜索框（local-search）的透明度设置
+.popup {
+  opacity: 0.9;
+}
+
+
+/************************* Comment ************************/
+
+/* comment-输入框背景图片 */
+.wl-editor {
+	background: url(https://cdn.makiru.top/images/comment_bg.webp) no-repeat right !important;
+} 
+.wl-editor:focus {
+	background-position-y: 200px !important;
+	transition: all .2s ease-in-out 0s !important;
+}
+
+/* comment-圆角 */
+.comments {
+  border-radius: $myradius !important;
+  .at {
+    border-bottom: none;
+  }
+  .wl-action[title="表情包"]{
+    display: none;
+  }
+   .wl-action[title="上传图片"]{
+    display: none;
+  }
+
+}
+
+
+
+/************************** Post ***************************/
+
+/* post-文章卡片圆角 */
+.post-block,
+.post-block+.post-block {
+  border-radius: $myradius !important;
+}
+
+/* post-图片阴影 */
+.posts-expand .post-body img {
+  box-shadow: $image-box-shadow;
+}
+
+.posts-expand .post-meta-container {
+  /* 时间下划线 */
+  time {
+    border-bottom: none;
+  }
+}
+
+/* 文章信息项超链接 */
+.post-meta-item a {
+  border-bottom: none;
+}
+
+
+/************************ Sidebar **************************/
+
+//侧边框的透明度设置
+.sidebar {
+  opacity: 0.9;
+}
+
+//菜单栏的透明度设置
+.header-inner {
+  background: rgba(255,255,255,0.9);
+}
+
+/* sidebar-标题背景 */
+.site-brand-container {
+  background: url(https://cdn.makiru.top/images/sidebar_bg.png);
+  background-position: 70% 20%;
+  background-size: cover;
+}
+
+/* sidebar-标题 */
+.site-title {
+  font-weight: bold;
+}
+
+/* sidebar-二级菜单圆角 */
+.sub-menu {
+  border-radius: $myradius !important;
+}
+
+.post-toc .nav a {
+  border-bottom: none; //文章目录不显示下划线（未激活项目）
+}
+
+
+/************************ cursor **************************/
+
+/**普通指针样式**/  
+body{
+  cursor:url(https://cdn.makiru.top/other/normal.ico),auto!important; 
+  }  
+/**链接指针样式**/  
+a:hover{
+  cursor:url(https://cdn.makiru.top/other/work.ico),pointer!important;
+  }
+p:hover{
+  cursor:url(https://cdn.makiru.top/other/texto.ico),auto!important;
+  }
+p img:hover{
+  cursor:url(https://cdn.makiru.top/other/normal.ico),auto!important; 
+}
+
+
+/************************ back-to-top **************************/
+
+//自定义回到顶部样式
+@media screen and (min-width: 900px) {
+    .back-to-top {
+      right: 60px;
+      width: 70px;  //图片素材宽度
+      height: 900px;  //图片素材高度
+      top: -900px;
+      bottom: unset;
+      transition: all .5s ease-in-out;
+      background: url("https://cdn.makiru.top/images/scroll.png");
+
+      //隐藏箭头图标
+      > i {
+        display: none;
+      }
+
+      &.back-to-top-on {
+        bottom: unset;
+        top: 100vh < (900px + 200px) ? calc( 100vh - 900px - 200px ) : 0px;
+      }
+}}
+
+
+/************************ footer **************************/
+.footer-support {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.beian {
+  a{
+    border-bottom: none;
+  }
+}
+
+/************************* tag-cloud *************************/
+.tag-cloud-tags {
+  a {
+    border-bottom: none;
+  }
+}
+
+/************************* categories *************************/
+.category-list-item a {
+  border-bottom: none;
+}
+
+.category-list-item {
+    margin: 5px 10px;
+    display: flex;
+    flex: 0 0 40%;
+    background: #faecd799;
+    flex-wrap: nowrap;
+    justify-content: center;
+    height: 147px;
+    align-items: center;
+}
+
+.category-all .category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+/************************* 子页面 *************************/
+.subpage-box {
+  display: inline-flex;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.subpage-box-cover {
+  margin: 4px;
+  flex: 1;
+}
+
+.subpage-box-cover img {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  object-fit: cover;
+
+  &:hover{
+    opacity: 0.6;
+  }
+}
+
+.subpage-box-cover .image-caption {
+  margin-top: 20px;
+  color: var(--text-color);
+}
+
+/************************* 按钮 *************************/
+
+/* 默认按钮 */
+.btn {
+  color: white!important;
+  border: none;
+  border-radius: $myradius;
+  background: $btn-default-bg;
+  btn-shadow-only();
+
+  &:hover {
+    background: $btn-default-hover-bg;
+    btn-shadow-hover-only();
+  }
+}
+
+/************************* 友链 *************************/
+
+/* 友链卡片 */
+.link-list {
+  gap: 1rem;
+  grid-gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+
+  +mobile() {
+    grid-template-columns: 1fr;
+  }
+}
+
+.link-list-container {
+  box-shadow: none;
+  padding: 0;
+  position: relative;
+  border-bottom: 1px dashed #d3d3d4; 
+  min-height: 5rem;
+  min-width: 0;
+  transition: background .3s;
+
+  &:hover {
+    background: none;
+    color: var(--link-hover-color);
+  }
+
+  &:hover p:first-of-type {
+    color: var(--link-hover-color);
+  }
+}
+
+.link-list-image {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  height: 4rem;
+  width: 4rem;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.link-list-container p {
+  margin: 0 1rem 0 5rem;
+
+  &:first-of-type {
+    font-weight: 700;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &:last-of-type {
+    font-size: .875em;
+    opacity: .8;
+    line-height: 1.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.link-list-container a {
+  border: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%
+  width: 100%;
+}
+
+.link-list-container .label {
+  font-size: 0.8em;
+  line-height: 18px;
+  border-radius: 3px;
+  vertical-align: top;
+  margin-left: 2px;
+  color: white !important;
+  padding: 0 6px !important;
+
+  &.info {
+    background: #428bca !important; //#5cb85c !important;
+  }
+
+  &.warn {
+    background: #e7c000 !important;
+  }
+}
+
+hr {
+  background-image: none;
+  height: 2em;
+  border: none;
+  margin: 1em 0 1em;
+  text-align: center;
+
+  &::after {
+    content: "···";
+    letter-spacing: 2em;
+    padding-left: 2em;
+    font-weight: bold;
+  }
+}
+
