@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="这篇文章仅用来供大家学习使用，希望别用来做危害社会的事情。在此声明，出了什么问题与我无关（好像也没啥用呢） 其实呢，就是教大家怎么搭建一个日常备用的代理而已（也没什么太大的用处，学习而已）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="heroku搭建v2ray+cf">
+<meta property="og:url" content="https://makiru.top/blog/article/40a5bf82.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="这篇文章仅用来供大家学习使用，希望别用来做危害社会的事情。在此声明，出了什么问题与我无关（好像也没啥用呢） 其实呢，就是教大家怎么搭建一个日常备用的代理而已（也没什么太大的用处，学习而已）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506155506270.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506160020386.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506163205887.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506163521178.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506164230699.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image_2021-05-06_16-45-05.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image_2021-05-06_16-50-30.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506165229199.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506165945811.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image_2021-05-06_17-07-38.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506171739750.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506171918744.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20210506172625002.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image_2021-05-06_17-29-08.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image_2021-05-06_17-33-42.jpeg">
+<meta property="article:published_time" content="2021-04-26T14:25:01.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:27:42.651Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="v2ray">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/image-20210506155506270.png">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/40a5bf82.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/40a5bf82.html","path":"article/40a5bf82.html","title":"heroku搭建v2ray+cf"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>heroku搭建v2ray+cf | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#heroku%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">heroku的介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cloudflare%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.</span> <span class="nav-text">cloudflare介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#v2ray%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.3.</span> <span class="nav-text">v2ray介绍</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%E6%90%9E%E8%B5%B7%E6%9D%A5"><span class="nav-number">2.</span> <span class="nav-text">开始搞起来</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#v2rayN%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">v2rayN配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CF%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">CF反向代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">5.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/40a5bf82.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="heroku搭建v2ray+cf | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          heroku搭建v2ray+cf
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2021-04-26 22:25:01" itemprop="dateCreated datePublished" datetime="2021-04-26T22:25:01+08:00">2021-04-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/40a5bf82.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/40a5bf82.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/40a5bf82.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>这篇文章仅用来供大家学习使用，希望别用来做危害社会的事情。在此声明，出了什么问题与我无关（好像也没啥用呢）</p>
+<p>其实呢，就是教大家怎么搭建一个日常备用的代理而已（也没什么太大的用处，学习而已）<span id="more"></span></p>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>首先，再次说明下，我国严禁网络代理的使用，也就是说谷歌，油管啥的在我国是不允许使用，所以该文章仅用来学习使用，出了问题自行负责。除此之外，大佬请出门右转，这里的文章只适合萌新小白。</p>
+<p>需要事先准备的东西：</p>
+<ol>
+<li>一个heroku的账户</li>
+<li>一个cloudflare的账户（没有？没事，待会教大家获取）</li>
+<li>v2ray软件（没有没事，待会会发）</li>
+<li>好像没了？额，，确实没了吧</li>
+</ol>
+<h4 id="heroku的介绍"><a href="#heroku的介绍" class="headerlink" title="heroku的介绍"></a>heroku的介绍</h4><p>实际上，heroku是一种云平台服务，大家只需要知道和云有关的东西是很牛逼的就行了，能做好多好多事</p>
+<p>说到这里，就需要大家去注册heroku的账户：<a target="_blank" rel="noopener" href="https://signup.heroku.com/">https://signup.heroku.com/</a></p>
+<img data-src="https://cdn.makiru.top/images/image-20210506155506270.png" alt="" style="zoom: 25%;" />
+
+<p>select a language可以选择PHP，其他的按自己想的填就可</p>
+<p>注册完后登录进去就行</p>
+<h4 id="cloudflare介绍"><a href="#cloudflare介绍" class="headerlink" title="cloudflare介绍"></a>cloudflare介绍</h4><p>这个嘛，大家只要记得它可以用来反向代理流量的就行，也可以理解为让你看视频更快更流畅</p>
+<p>注册嘛：<a target="_blank" rel="noopener" href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a></p>
+<img data-src="https://cdn.makiru.top/images/image-20210506160020386.png" alt="" style="zoom:25%;" />
+
+ 
+
+<h4 id="v2ray介绍"><a href="#v2ray介绍" class="headerlink" title="v2ray介绍"></a>v2ray介绍</h4><p>v2rayN作为一款代理软件，目前还是比较好用的，不过嘛，我个人还是比较喜欢小猫咪的（clash），下载位置：<a target="_blank" rel="noopener" href="https://github.com/2dust/v2rayN/releases/download/4.14/v2rayN-Core.zip">https://github.com/2dust/v2rayN/releases/download/4.14/v2rayN-Core.zip</a></p>
+<p>这个是目前比较新的版本，喜欢其他版本的也可以自己去下，因为是github，可能下载都是个问题，所以放个我自己的盘吧：</p>
+<p><a target="_blank" rel="noopener" href="https://qianyan.lanzous.com/b0263wn9g">https://qianyan.lanzous.com/b0263wn9g</a>     密码:g8ro</p>
+<h3 id="开始搞起来"><a href="#开始搞起来" class="headerlink" title="开始搞起来"></a>开始搞起来</h3><p>之前不是已经注册好heroku账号了嘛，登录进去，你们的界面应该和我这一样吧</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506163205887.png" alt="" style="zoom: 25%;" />
+
+<p>可能有人会说不一样吧，确实不一样，因为我已经建好了两个app了，大家按照我的做法，待会也就可以建好一个了，</p>
+<p>保持这个界面不变，点击下面这个链接：<a target="_blank" rel="noopener" href="https://dashboard.heroku.com/new?template=https://github.com/bclswl0827/v2ray-heroku">https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fbclswl0827%2Fv2ray-heroku</a>  进入下面的界面</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506163521178.png" alt="" style="zoom:25%;" />
+
+<p>App name 随你喜欢填，国家也可以选其他的，不过美国的好点，这里的UUID后面需要用到，不过也不用急着复制保存，后面还能找的到，填好后，点击depoly app即可，等出现your app was successfully depolyed就可以了，接着点击manage your app，进入管理界面。</p>
+<p>然后再点击setting进入如下界面：</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506164230699.png" alt="" style="zoom:25%;" />
+
+
+
+<p>到这里，其实你的代理已经算是搭建好了，接下里便是v2ray那边的事了。</p>
+<h3 id="v2rayN配置"><a href="#v2rayN配置" class="headerlink" title="v2rayN配置"></a>v2rayN配置</h3><p>打开v2rayN.exe，长这样：</p>
+<img data-src="https://cdn.makiru.top/images/image_2021-05-06_16-45-05.png" alt="" style="zoom: 50%;" />
+
+<p>因为本来这张图有我的一些ip信息，所以处理过，别太介意</p>
+<p>点击服务器，然后点击添加VMess服务器，进入如下界面：</p>
+<img data-src="https://cdn.makiru.top/images/image_2021-05-06_16-50-30.png" alt="" style="zoom:60%;" />
+
+<p>地址栏填啥呢？在这里找：就是下面图中我划掉的部分，记住要把https:&#x2F;&#x2F;和最后面的&#x2F;删掉</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506165229199.png" alt="" style="zoom:50%;" />
+
+<p>端口填443（大佬应该知道其实443是不怎么安全的，没人搭建v2ray用443端口，因为很容易封，不过嘛，我们只是备用而已，不容易封）</p>
+<p>用户id就是之前说的UUID啦，在哪找呢</p>
+<p><img data-src="https://cdn.makiru.top/images/image-20210506165945811.png"></p>
+<p>点击下Reveal Config Vars就会出现啦</p>
+<p>传输协议选择ws，别名可以自己填个好管理的，路径填&#x2F;，底层传输安全选择tls，允许不安全连接选择true，点击确定即可</p>
+<p>然后，选中你的服务器，右键点击设为活动服务器，接下来便可以进入谷歌啥的了。。</p>
+<img data-src="https://cdn.makiru.top/images/image_2021-05-06_17-07-38.png" alt="" style="zoom: 67%;" />
+
+
+
+<p>如果对速度啥的没要求的朋友，到这其实就可以结束了，不过嘛，可能有和我一样的朋友，喜欢在油管上那种丝滑般的感觉，可以继续往下看。</p>
+<h3 id="CF反向代理"><a href="#CF反向代理" class="headerlink" title="CF反向代理"></a>CF反向代理</h3><p>这里嘛，就需要之前注册好的cloudflare账号咯</p>
+<p>登录进去，应该长这样：</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506171739750.png" alt="" style="zoom: 25%;" />
+
+<p>点击workers进去，界面长这样：</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506171918744.png" alt="" style="zoom:25%;" />
+
+<p>因为我之前已经弄过两个了，所以这里会有两个worker，因为有部分隐私信息，所以涂了点鸦</p>
+<p>点击创建worker，进去，然后，将左侧的脚本代码全部删掉，换成下面的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">addEventListener(</span><br><span class="line">	&quot;fetch&quot;,event =&gt; &#123;</span><br><span class="line">		let url=new URL(event.request.url);</span><br><span class="line">		url.hostname=&quot;域名&quot;;</span><br><span class="line">		let request=new Request(url,event.request);</span><br><span class="line">		event. respondWith(</span><br><span class="line">			fetch(request)</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>代码里的域名改为之前你填入v2rayN里的地址，就是我说别加https:&#x2F;&#x2F;和&#x2F;的那个，千万注意前后别加空格</p>
+<p>点击保存并部署即可，测试一下，点击发送，成功的话是这样：</p>
+<img data-src="https://cdn.makiru.top/images/image-20210506172625002.png" alt="" style="zoom:25%;" />
+
+<p>然后嘛，继续去v2rayN配置（注意，上图中的那个发送左边的地址复制下，待会有用）：</p>
+<img data-src="https://cdn.makiru.top/images/image_2021-05-06_17-29-08.png" alt="" style="zoom:50%;" />
+
+<p>将刚才复制的地址除掉开头的https:&#x2F;&#x2F;和最后的&#x2F;填入地址栏，其他的不变，点击确认，便实现了反向代理，如果正常的话，油管的速度应该就可以上去了。</p>
+<img data-src="https://cdn.makiru.top/images/image_2021-05-06_17-33-42.jpeg" alt="" style="zoom:50%;" />
+
+<p>上图只是随便测的速度，大佬别介意。。。</p>
+<p>由于cf反向代理选择的ip可能并不太适合每个人所在地区的网络，因此我们需要选择适合本地网络的ip用于cf，所以需要使用到筛选ip的工具，我给个盘的链接，有需要自己下：<a target="_blank" rel="noopener" href="https://qianyan.lanzous.com/inrLtov6uof">https://qianyan.lanzous.com/inrLtov6uof</a>          密码:2970</p>
+<p>使用方法嘛，很简单，双击CF优选IP.bat就可以进入命令行界面，然后它会让你输入一个自己想要的速度上限，一般根据自己网络带宽看，我的校园网比较拉，在50左右，所以我填的是60，70，80，其实可以一个一个试，看看最高多少，就用那个ip</p>
+<p>怎么用呢，很简单，把ip填入v2rayN之前那个地址栏，把地址栏的原本内容填入那个伪装域名就可以了。</p>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>到这里，我相信大家就可以愉快的使用了，油管啥的也可以尽情看了，不过嘛，有一些需要注意的地方：</p>
+<ol>
+<li>因为heroku这个相当于给学生研究用的，所以别过度滥用，比如整天多人地去看4k视频啦，租借啥的啦，一不小心会被封号的哟</li>
+<li>别用来做违法的事，多次声明，出了事与我无关</li>
+<li>heroku好像多久不用会休眠来着，我也不太记得了，不过我的一直都没关，我也不常用，就用来搜点资料用用</li>
+<li>最好只是个人使用，多人使用封号几率很大，并且最后一个账号下多建几个应用，就像前面一样建个3到4个，换着用，负载均衡</li>
+</ol>
+<p>以上便是所有的教程内容啦，下期见，拜拜～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/v2ray/" rel="tag"><i class="fa fa-tag"></i> v2ray</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/6c8a55b2.html" rel="prev" title="魔法科高校的劣等生">
+                  <i class="fa fa-chevron-left"></i> 魔法科高校的劣等生
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/5e03e086.html" rel="next" title="fgo-抽卡无语篇">
+                  fgo-抽卡无语篇 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/40a5bf82.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

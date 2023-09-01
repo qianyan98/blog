@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="最近的我，感觉出了点问题（或许说我原本就是这么的菜。。）。为什么这么说呢？起因是这样的，今天呢，我终于开始刷leetcode的第101题了，不是有句话说得好嘛，万事开头难，对我而言，好像leetcode上的都是开头，怎么说呢，第101题标注的是一道简单题，题目的内容也就是这篇文章的标题——对称二叉树的判断。本来呢，这在人眼看来，也就是一件小case。只需要判断是不是对称的而已，不是很简单嘛，而且也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="对称二叉树的判断及二叉树的迭代遍历">
+<meta property="og:url" content="https://makiru.top/blog/article/20ff5111.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="最近的我，感觉出了点问题（或许说我原本就是这么的菜。。）。为什么这么说呢？起因是这样的，今天呢，我终于开始刷leetcode的第101题了，不是有句话说得好嘛，万事开头难，对我而言，好像leetcode上的都是开头，怎么说呢，第101题标注的是一道简单题，题目的内容也就是这篇文章的标题——对称二叉树的判断。本来呢，这在人眼看来，也就是一件小case。只需要判断是不是对称的而已，不是很简单嘛，而且也">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/202203172116879.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/202203172119497.jpg">
+<meta property="og:image" content="https://cdn.makiru.top/images/202203172130401.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/202203172133025.png">
+<meta property="article:published_time" content="2022-03-17T12:43:28.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:32:41.968Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/202203172116879.png">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/20ff5111.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/20ff5111.html","path":"article/20ff5111.html","title":"对称二叉树的判断及二叉树的迭代遍历"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>对称二叉树的判断及二叉树的迭代遍历 | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">我的思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E7%A1%AE%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">正确思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E8%BF%AD%E4%BB%A3%E9%81%8D%E5%8E%86"><span class="nav-number">4.</span> <span class="nav-text">二叉树的迭代遍历</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%88%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">4.1.</span> <span class="nav-text">先序遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">4.2.</span> <span class="nav-text">后序遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="nav-number">4.3.</span> <span class="nav-text">中序遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%82%E6%AC%A1%E9%81%8D%E5%8E%86"><span class="nav-number">4.4.</span> <span class="nav-text">层次遍历</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">5.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/20ff5111.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="对称二叉树的判断及二叉树的迭代遍历 | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          对称二叉树的判断及二叉树的迭代遍历
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2022-03-17 20:43:28" itemprop="dateCreated datePublished" datetime="2022-03-17T20:43:28+08:00">2022-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/20ff5111.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/20ff5111.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/20ff5111.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>最近的我，感觉出了点问题（或许说我原本就是这么的菜。。）。为什么这么说呢？起因是这样的，今天呢，我终于开始刷leetcode的第101题了，不是有句话说得好嘛，万事开头难，对我而言，好像leetcode上的都是开头，怎么说呢，第101题标注的是一道简单题，题目的内容也就是这篇文章的标题——对称二叉树的判断。本来呢，这在人眼看来，也就是一件小case。只需要判断是不是对称的而已，不是很简单嘛，而且也标注的是简单题～可是呢，到我这，呵呵，硬是没想到正确的方向，一直在自己的“死胡同”里打转，待会就介绍下我的死胡同之旅（虽然也不算是死胡同）。</p>
+<p>一碰到二叉树和图，我就有点小害怕，为啥呢，因为可以有很多变化～所以今天我就把二叉树的几种遍历（特指迭代）好好整理下。</p>
+<p><img data-src="https://cdn.makiru.top/images/202203172116879.png"></p>
+<span id="more"></span>
+
+<h3 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">给你一个二叉树的根节点 root ， 检查它是否轴对称。</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://cdn.makiru.top/images/202203172119497.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：root = [1,2,2,null,3,null,3]</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h3><p>我的思路很直接，相信一说，大家就懂了，但是呢，先说下，我的思路是错的。</p>
+<p>我一开始想的是，既然和对称有关，那第一想到的就是回文数串，回文数串就是一个对称的经典实例。也正是这个想法，彻底地把我带进了深坑～</p>
+<p>因此，我就想，既然都是对称，那对二叉树的某种遍历得到的序列是不是也是一个回文数串呢？而遍历的算法，先序与后序很明显是不符合要求的（对称），于是我兴高采烈地拿了几棵对称的二叉树用中序遍历进行实验，额，偏偏还都是回文数串，嗯，没错，，我信了，我竟然就这么相信：<strong>只要中序遍历得到的是一个回文数串，那一定是对称二叉树</strong>（错的❌）待会我会举出反例（其实是leetcode给出的。。）</p>
+<p>思路既然都有了，我就开始写咯，于是，下面的这个代码就是最后的结果（期间，因为对null节点处理不当，导致错的原因很明显）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; path = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isSymmetric</span><span class="params">(TreeNode root)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Inorder(root);</span><br><span class="line">    <span class="keyword">return</span> isPalindrome();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">Inorder</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(root == <span class="literal">null</span>)&#123;</span><br><span class="line">        path.add(<span class="literal">null</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(root.left != <span class="literal">null</span> || root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">        Inorder(root.left);</span><br><span class="line">        path.add(root.val);</span><br><span class="line">        Inorder(root.right);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        path.add(root.val);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//判读回文</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">isPalindrome</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> path.size() - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (i &lt; j)&#123;</span><br><span class="line">        <span class="keyword">if</span>(path.get(i) == path.get(j))&#123;</span><br><span class="line">            i++;</span><br><span class="line">            j--;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果是咋样的呢？</p>
+<p><img data-src="https://cdn.makiru.top/images/202203172130401.png" alt="image-20220317213037725"></p>
+<p>当时的我，都惊了，为啥会有一个过不去呢？于是我去把这个给的用例的二叉树画了个图看了下，就一切都明了了。。</p>
+<img data-src="https://cdn.makiru.top/images/202203172133025.png" alt="" style="zoom:50%;" />
+
+<p>我相信只要是个正常人，一眼就能看出，这不是一个对称的二叉树。。可是为什么代码会将其认定为是对称的呢，我按照代码的思路，对它进行了一次中序遍历，结果发现，竟然是一个回文的数串。</p>
+<p>经过了很长的思考，我想明白了，原来我一开始依靠的那个想法是不对的：</p>
+<blockquote>
+<p>中序遍历得到的序列如果是对称的话，二叉树也是对称的（❌）</p>
+<p>二叉树是对称的话，其中序遍历得到的序列一定是对称的（✅）</p>
+</blockquote>
+<p>就这样，我被这道简单题弄的蛮难受的～</p>
+<h3 id="正确思路"><a href="#正确思路" class="headerlink" title="正确思路"></a>正确思路</h3><p>相信很多人都明白镜像的道理，将一棵二叉树和其在镜中的二叉树相比较会发现，镜中的某个节点的左子树与镜外的对应节点的右子树是对称的，同样的，镜里的节点的右子树与镜外的对应节点的左子树是对称的，因此，如果使用递归来写，其实，只需要知道这个思路，还是很好写的，这也是为什么这道题会被标注为简单题的原因吧～</p>
+<p>思路如下：</p>
+<p>对于两棵树而言，镜像对称需要满足：</p>
+<ul>
+<li>根节点的值相等</li>
+<li>每棵树的左子树都与另一棵树的右子树互为镜像对称</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//递归</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isSymmetric</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> check(root, root);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">check</span><span class="params">(TreeNode left, TreeNode right)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left == <span class="literal">null</span> &amp;&amp; right == <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(left != <span class="literal">null</span> &amp;&amp; right != <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> left.val == right.val &amp;&amp; check(left.left, right.right) &amp;&amp; check(left.right, right.left);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>上面的解法呢，是递归的写法，那如果是迭代呢，众所周知，如果想把递归改成迭代，栈或者具有栈功能的其他数据结构是不可缺少的，当然，有时候会因为某些原因（比如访问顺序），而用队列来代替栈的使用，因此这道题也是如此。</p>
+<p>思路上其实是没什么区别的，我们需要一个队列来存储节点。首先我们将树的根节点入队两次，然后再依次出队两个节点x，y（开始时自然是根节点），判断节点的值是否相等。</p>
+<ul>
+<li>相等：<font color=red>分别将x的左节点（其实是左子树），y的右节点，x的右节点，y的左节点依次入队</font></li>
+<li>不等：直接返回false</li>
+</ul>
+<p>注意：红色部分的入队顺序是有讲究的，我们需要保证出队时连续两个节点在原二叉树中是对称的位置上。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//迭代</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isSymmetric</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> check(root, root);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">check</span><span class="params">(TreeNode root1, TreeNode root2)</span>&#123;</span><br><span class="line">    Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    queue.offer(root1);</span><br><span class="line">    queue.offer(root2);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty())&#123;</span><br><span class="line">        root1 = queue.poll();</span><br><span class="line">        root2 = queue.poll();</span><br><span class="line">        <span class="keyword">if</span>(root1 == <span class="literal">null</span> &amp;&amp; root2 == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(root1 == <span class="literal">null</span> || root2 == <span class="literal">null</span> || root1.val != root2.val)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        queue.offer(root1.left);</span><br><span class="line">        queue.offer(root2.right);</span><br><span class="line">        queue.offer(root1.right);</span><br><span class="line">        queue.offer(root2.left);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提示：由于LinkedList实现了Queue的某些方法，因此可以直接使用LinkedList；其次，使用queue的offer与poll方法可以避免某些异常的抛出。</p>
+<h3 id="二叉树的迭代遍历"><a href="#二叉树的迭代遍历" class="headerlink" title="二叉树的迭代遍历"></a>二叉树的迭代遍历</h3><p>二叉树的遍历方式有很多种，今天我为以后的自己整理四种出来：先序，中序，后序，层次。</p>
+<p>其中，如果要我说的话，先序与后序相比较而言，简单点～</p>
+<p>一般来说，不是后序很难嘛，为啥这里会说简单呢，因为如果是严格地按照后序来推，确实蛮难，但是，后序与先序之间的遍历是有关系的，至于是什么关系，待会再说～</p>
+<h4 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h4><p>处理顺序：中    左    右</p>
+<p>遍历方法：将根节点入栈；出栈；访问，并将出栈的节点的右节点，左节点（因为要先访问左子树再访问右子树，加上栈的性质）依次入栈；以此类推下去即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">PreOrder</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    Deque&lt;TreeNode&gt; stack = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line">    stack.addFirst(root);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(!stack.isEmpty())&#123;</span><br><span class="line">        root = stack.removeFirst();</span><br><span class="line">        path.add(root.val);</span><br><span class="line">        <span class="keyword">if</span>(root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(root.left != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root.left);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h4><p>处理顺序：左     右     中</p>
+<p>遍历方法：可以发现，处理顺序与先序的顺序是有关系的，只需要将先序的左右颠倒再整体颠倒就是后序的顺序。</p>
+<p>中  左  右  &#x3D;&gt;  中   右   左  &#x3D;&gt;  左   右   中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">PostOrder</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    Deque&lt;TreeNode&gt; stack = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line">    stack.addFirst(root);</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty())&#123;</span><br><span class="line">        root = stack.removeFirst();</span><br><span class="line">        path.add(root.val);</span><br><span class="line">        <span class="keyword">if</span>(root.left != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root.left);   <span class="comment">//颠倒入栈顺序</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    Collections.reverse(path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h4><p>处理顺序：左    中    右</p>
+<p>遍历方法：因为中序遍历最先处理的节点是左子树上的最左节点，而不是根节点，因此，我们必须首先找到这个节点，利用栈将途径的节点存储下来，便于待会的回溯；找到后，访问该节点，再访问该节点的右子树（或许有人会问，为啥不访问该节点的左子树，呵呵，因为，这个节点已经是最左节点，不会存在左子树），如果没有右子树，那么就会出栈一个元素（也就是刚才那个元素的父亲节点，至于为什么会访问这个父亲节点呢，因为它的左子树已经访问完全啦），继续访问，再访问其右子树，以此类推下去。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">InOrder</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    Deque&lt;TreeNode&gt; stack = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (root != <span class="literal">null</span> || !stack.isEmpty())&#123;</span><br><span class="line">        <span class="comment">//找到最左子节点</span></span><br><span class="line">        <span class="keyword">while</span>(root != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root);</span><br><span class="line">            root = root.left;</span><br><span class="line">        &#125;</span><br><span class="line">        root = stack.removeFirst();</span><br><span class="line">        path.add(root.val);</span><br><span class="line">        root = root.right;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="层次遍历"><a href="#层次遍历" class="headerlink" title="层次遍历"></a>层次遍历</h4><p>处理顺序：按层来进行处理</p>
+<p>遍历方法：一开始我以为层次遍历是最麻烦的，我甚至在方法的参数中加上了层数的信息，最后发现，呵呵呵，好像不是很难。层次遍历，字面意思，遍历完一层再去遍历下一层。因此，将根节点入队后（这里我用的是队列，其实是Deque的队列属性），再出队一个元素，访问（第一层），再将该节点的左节点，右节点依次入队；出队一个元素，访问（第二层），再将该节点的左右节点依次入队；再出队一个元素，访问（第二层最后一个元素，结束）。以此类推。</p>
+<p>其实呢，仔细观察会发现，每次访问完一层后，下一层的所有元素都会被入队（<font color=red>注意，队列是先进先出</font>）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">LevelOrder</span><span class="params">(TreeNode root)</span>&#123;</span><br><span class="line">    Deque&lt;TreeNode&gt; stack = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line">    stack.addFirst(root);   <span class="comment">//主要是用来记录每一层从左到右的节点</span></span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty())&#123;</span><br><span class="line">        root = stack.removeLast();   <span class="comment">//注意，这里使用的是removeLast而不是removeFirst</span></span><br><span class="line">        path.add(root.val);</span><br><span class="line">        <span class="comment">//将该节点的左节点与右节点放入</span></span><br><span class="line">        <span class="keyword">if</span>(root.left != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(root.right != <span class="literal">null</span>)&#123;</span><br><span class="line">            stack.addFirst(root.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>以上就是我在做这道题的时候，想把二叉树的几种迭代遍历方法都写一遍，加深印象（毕竟一般情况下，都是直接用的递归），为以后的自己留点笔记吧～</p>
+<p>番剧啥的，等等吧，最近已经被这疫情堵在寝室里，搞得人有点堵得慌～白白啦！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag"><i class="fa fa-tag"></i> 二叉树</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/bee80928.html" rel="prev" title="morris遍历算法">
+                  <i class="fa fa-chevron-left"></i> morris遍历算法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/7612ee64.html" rel="next" title="买股票的那点事">
+                  买股票的那点事 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/20ff5111.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

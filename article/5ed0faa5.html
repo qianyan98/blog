@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="不得不说，上海这几天的天气是真的有毒，时不时超级冷，还时不时下几滴雨，烦得很。最近临近期末，还有好多大作业啦，项目啦，小作业啦，各种实验啦，烦得不要不要的，整的我连看番的时间都快没了(⁎⁍̴̛ᴗ⁍̴̛⁎)～ 今天呢，本科母校竟然又因为这种奇葩原因久居热搜，真的是服了网友们的“奇思妙想”，这迫击炮逮谁轰谁啊？又是烦心事 》**《 不说烦心事了，说点开心的，额，，今天刚打完一天工，又有小钱可以拿了，算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有效数字—状态机">
+<meta property="og:url" content="https://makiru.top/blog/article/5ed0faa5.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="不得不说，上海这几天的天气是真的有毒，时不时超级冷，还时不时下几滴雨，烦得很。最近临近期末，还有好多大作业啦，项目啦，小作业啦，各种实验啦，烦得不要不要的，整的我连看番的时间都快没了(⁎⁍̴̛ᴗ⁍̴̛⁎)～ 今天呢，本科母校竟然又因为这种奇葩原因久居热搜，真的是服了网友们的“奇思妙想”，这迫击炮逮谁轰谁啊？又是烦心事 》**《 不说烦心事了，说点开心的，额，，今天刚打完一天工，又有小钱可以拿了，算">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/202112161715143.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/202112170028249.jpg">
+<meta property="article:published_time" content="2021-12-16T09:03:43.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:33:56.196Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/202112161715143.png">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/5ed0faa5.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/5ed0faa5.html","path":"article/5ed0faa5.html","title":"有效数字—状态机"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>有效数字—状态机 | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">我的思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E6%95%B0%E5%88%A4%E6%96%AD%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">整数判断：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E6%95%B0%E5%88%A4%E6%96%AD%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">小数判断：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%BD%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">好思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/5ed0faa5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="有效数字—状态机 | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          有效数字—状态机
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2021-12-16 17:03:43" itemprop="dateCreated datePublished" datetime="2021-12-16T17:03:43+08:00">2021-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/5ed0faa5.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/5ed0faa5.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/5ed0faa5.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>不得不说，上海这几天的天气是真的有毒，时不时超级冷，还时不时下几滴雨，烦得很。最近临近期末，还有好多大作业啦，项目啦，小作业啦，各种实验啦，烦得不要不要的，整的我连看番的时间都快没了(⁎⁍̴̛ᴗ⁍̴̛⁎)～</p>
+<p>今天呢，本科母校竟然又因为这种奇葩原因久居热搜，真的是服了网友们的“奇思妙想”，这迫击炮逮谁轰谁啊？又是烦心事 》**《</p>
+<p>不说烦心事了，说点开心的，额，，今天刚打完一天工，又有小钱可以拿了，算嘛？不算的话，今天把部分作业搞完了？错！今天我又一次在不知觉中将自己的闹钟给关了（绝对定了的）！！这才是大事（本来是7.25的闹钟，8.30开工，结果，一觉睡醒8.30了，呵呵～）</p>
+<p><img data-src="https://cdn.makiru.top/images/202112161715143.png"></p>
+<span id="more"></span>
+
+<p>今天呢，要讲的是昨天做的一道题，蛮有意思的，竟然和我本科学的编译原理扯上关系了，害我还去看了会本科知识（因为我本科编译原理学的贼差）</p>
+<h3 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h3><p><strong>有效数字</strong>（按顺序）可以分成以下几个部分：</p>
+<ol>
+<li>一个 <strong>小数</strong> 或者 <strong>整数</strong></li>
+<li>（可选）一个 ‘e’ 或 ‘E’ ，后面跟着一个 <strong>整数</strong></li>
+</ol>
+<p><strong>小数</strong>（按顺序）可以分成以下几个部分：</p>
+<ol>
+<li><p>（可选）一个符号字符（’+’ 或 ‘-‘）</p>
+</li>
+<li><p>下述格式之一：</p>
+<ol>
+<li><p>至少一位数字，后面跟着一个点 ‘.’</p>
+</li>
+<li><p>至少一位数字，后面跟着一个点 ‘.’ ，后面再跟着至少一位数字</p>
+</li>
+<li><p>一个点 ‘.’ ，后面跟着至少一位数字</p>
+</li>
+</ol>
+</li>
+</ol>
+<p><strong>整数</strong>（按顺序）可以分成以下几个部分：</p>
+<ol>
+<li>（可选）一个符号字符（’+’ 或 ‘-‘）</li>
+<li>至少一位数字</li>
+</ol>
+<h3 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h3><p>其实我的思路比较直接，相信我一说大家也都能懂</p>
+<p>这道题无非就是给定有效数字的模式，需要我们自己去比对，因此我们可以按照以下几个步骤对给定的字符串s作出判断</p>
+<ul>
+<li><p>首先判断s中是否包含非法字符，合法字符包括：0-9，+-号，小数点，E与e，其余的字符都可被认定为非法字符</p>
+</li>
+<li><p>接着判断s中是否包含E或者e，如果E或e的数量超过1，直接false，否则，借助E或e，将s划分，如果划分后，只有一个字符串，则只可能是E或e在结尾，返回false</p>
+</li>
+<li><p>划分后，判断前一个字符串是否为小数或者整数，判断后一个字符串是否为整数，如果都是，则true，反之，false</p>
+</li>
+<li><p>如果没有E或者e，则直接判断s是否为整数或者小数</p>
+</li>
+</ul>
+<p>相信明眼人已经看清重点在哪了，没错，关键在于如何判断一个字符串是否为整数或者小数呢？</p>
+<h4 id="整数判断："><a href="#整数判断：" class="headerlink" title="整数判断："></a>整数判断：</h4><p>首先判断开头是否为+或-，是的话，直接从第二位判断，不是的话直接从第一位判断，判断方式很直接，只要每一位字符都是0-9就可以。当然开始需要对s的length做出判断，如果长度为0肯定就直接false啦，如果只有一个+或-号自然也是false，代码如下，其中map是一个key为0-9，value为0的哈希表</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Boolean <span class="title function_">isInteger</span><span class="params">(String s, Map&lt;Character,Integer&gt; map)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s.length() == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(s.length() == <span class="number">1</span> &amp;&amp; (s.charAt(<span class="number">0</span>) == <span class="string">&#x27;+&#x27;</span> || s.charAt(<span class="number">0</span>) == <span class="string">&#x27;-&#x27;</span>))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;s.length();i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>((s.charAt(i) == <span class="string">&#x27;+&#x27;</span> || s.charAt(i) == <span class="string">&#x27;-&#x27;</span>) &amp;&amp; i == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(!map.containsKey(s.charAt(i)))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="小数判断："><a href="#小数判断：" class="headerlink" title="小数判断："></a>小数判断：</h4><p>小数判断相对而言较为麻烦点，因为存在可能性会稍微有点多，相信大家对小数都很熟悉，我们以小数点为界，将字符串分为两部分，一般而言，只要前后两部分都是整数就是一个小数，不过这里需要做出一些额外的判断</p>
+<ul>
+<li><p>小数点个数大于1直接false</p>
+</li>
+<li><p>分割后如果没有字符串，直接false（表示原本就一个小数点）</p>
+</li>
+<li><p>分割后如果只有一个字符串，表示小数点只能在结尾，这时，只需要判断分割后的那个字符串是否为整数即可（原因是split时，如果分割符在开头，则第一个分割出来的字符串是空串””）</p>
+</li>
+<li><p>如果是正常的两个字符串，也有多种情况：</p>
+<ul>
+<li><p>第一个字符串：</p>
+<ul>
+<li><p>第一个字符串是空串</p>
+</li>
+<li><p>第一个字符串是整数</p>
+</li>
+<li><p>第一个字符串是+或-</p>
+</li>
+</ul>
+</li>
+<li><p>第二个字符串：</p>
+<ul>
+<li>第二个字符串是整数，并且第一个字符不是+或-号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>满足上述情况的两个字符串即可返回true，其余直接false</p>
+</li>
+</ul>
+<p>具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Boolean <span class="title function_">isFloat</span><span class="params">(String s, Map&lt;Character,Integer&gt; map)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s.length() == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;s.length();i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s.charAt(i) == <span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">            count++;</span><br><span class="line">            index = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(count &gt; <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    String[] temp = s.split(<span class="string">&quot;\\.&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span>(temp.length == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(temp.length == <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> isInteger(temp[<span class="number">0</span>],map);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>((isInteger(temp[<span class="number">0</span>],map) || temp[<span class="number">0</span>].length() == <span class="number">0</span> || (temp[<span class="number">0</span>].length() == <span class="number">1</span> &amp;&amp; (temp[<span class="number">0</span>].charAt(<span class="number">0</span>) == <span class="string">&#x27;+&#x27;</span> || temp[<span class="number">0</span>].charAt(<span class="number">0</span>) == <span class="string">&#x27;-&#x27;</span>))) &amp;&amp; (isInteger(temp[<span class="number">1</span>],map) &amp;&amp; temp[<span class="number">1</span>].charAt(<span class="number">0</span>) != <span class="string">&#x27;+&#x27;</span> &amp;&amp; temp[<span class="number">1</span>].charAt(<span class="number">0</span>) != <span class="string">&#x27;-&#x27;</span>))&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="好思路"><a href="#好思路" class="headerlink" title="好思路"></a>好思路</h3><p>利用有限状态自动机来进行解题，这是一种比较好的思路，具体的实现如下：</p>
+<p>首先，我们需要根据题目的含义，将有效数字的所有可能性，以状态转换图的形式画出来，便于得到后续的状态转换表：</p>
+<p><img data-src="https://cdn.makiru.top/images/202112170028249.jpg"></p>
+<p>我相信各位大佬的理解能力应该都很强，关于这个图我就不细讲了，毕竟确实很容易理解（就是自己来画，蛮难的，编译原理没学好～）</p>
+<p>额，要真的需要解释下的话，其实也没啥解释的，不就是一开始是个空的串，可以加入0-9数字，也可以一开始加入+或-号，其实就是构造一个有效数字的路径图</p>
+<p>根据状态转换图可以得出下表：</p>
+<table>
+<thead>
+<tr>
+<th>state</th>
+<th>blank</th>
+<th>+&#x2F;-</th>
+<th>0-9</th>
+<th>.</th>
+<th>e&#x2F;E</th>
+<th>other</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>6</td>
+<td>2</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>6</td>
+<td>2</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>-1</td>
+<td>-1</td>
+<td>3</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>-1</td>
+<td>-1</td>
+<td>3</td>
+<td>-1</td>
+<td>4</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-1</td>
+<td>7</td>
+<td>5</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>-1</td>
+<td>-1</td>
+<td>5</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>-1</td>
+<td>-1</td>
+<td>6</td>
+<td>3</td>
+<td>4</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>-1</td>
+<td>-1</td>
+<td>5</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>8</td>
+<td>8</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+</tbody></table>
+<p>其中，状态8是用来处理字符串s结尾多余的的空格，因此所有终止态都必须跟上一个状态8，部分值为-1表示遇到一些不合法的字符（就是前面说的那些），直接返回false</p>
+<p>具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">make</span><span class="params">(<span class="type">char</span> c)</span> &#123;</span><br><span class="line">        <span class="keyword">switch</span>(c) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27; &#x27;</span>: <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>: <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;.&#x27;</span>: <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;e&#x27;</span>: <span class="keyword">return</span> <span class="number">4</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">if</span>(c &gt;= <span class="number">48</span> &amp;&amp; c &lt;= <span class="number">57</span>) <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isNumber</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">finals</span> <span class="operator">=</span> <span class="number">0b101101000</span>;</span><br><span class="line">        <span class="type">int</span>[][] transfer = <span class="keyword">new</span> <span class="title class_">int</span>[][]&#123;&#123; <span class="number">0</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">2</span>,-<span class="number">1</span>&#125;,</span><br><span class="line">                                       &#123;-<span class="number">1</span>,-<span class="number">1</span>, <span class="number">6</span>, <span class="number">2</span>,-<span class="number">1</span>&#125;,</span><br><span class="line">                                       &#123;-<span class="number">1</span>,-<span class="number">1</span>, <span class="number">3</span>,-<span class="number">1</span>,-<span class="number">1</span>&#125;,</span><br><span class="line">                                       &#123; <span class="number">8</span>,-<span class="number">1</span>, <span class="number">3</span>,-<span class="number">1</span>, <span class="number">4</span>&#125;,</span><br><span class="line">                                       &#123;-<span class="number">1</span>, <span class="number">7</span>, <span class="number">5</span>,-<span class="number">1</span>,-<span class="number">1</span>&#125;,</span><br><span class="line">                                       &#123; <span class="number">8</span>,-<span class="number">1</span>, <span class="number">5</span>,-<span class="number">1</span>,-<span class="number">1</span>&#125;,</span><br><span class="line">                                       &#123; <span class="number">8</span>,-<span class="number">1</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">4</span>&#125;,</span><br><span class="line">                                       &#123;-<span class="number">1</span>,-<span class="number">1</span>, <span class="number">5</span>,-<span class="number">1</span>,-<span class="number">1</span>&#125;,</span><br><span class="line">                                       &#123; <span class="number">8</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>,-<span class="number">1</span>&#125;&#125;;</span><br><span class="line">        <span class="type">char</span>[] ss = s.toCharArray();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i &lt; ss.length; ++i) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> make(ss[i]);</span><br><span class="line">            <span class="keyword">if</span> (id &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            state = transfer[state][id];</span><br><span class="line">            <span class="keyword">if</span> (state &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (finals &amp; (<span class="number">1</span> &lt;&lt; state)) &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color=red>注意：final的取值是有意义的，在上面的状态转换图中，我们可以得知：状态3，5，6，8可以作为正常的终止态，因此可以通过位操作来判断最终的状态是否在这几个选择中。具体上来说：final的值与1左移3位，1左移5位，1左移6位，1左移8位得到的是3，5，6，8；而其他的状态值与操作后都是0</font></p>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>以上便是这道题的全部内容啦！给我留下印象最深的就是有限状态机在算法中竟然还可以这么使用，学到了～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/bc3847dc.html" rel="prev" title="哀酱是我老婆～">
+                  <i class="fa fa-chevron-left"></i> 哀酱是我老婆～
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/a1ef62fb.html" rel="next" title="美好的平安夜">
+                  美好的平安夜 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/5ed0faa5.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

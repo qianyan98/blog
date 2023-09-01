@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="又是一天枯燥无味的课，上午是憨批的学术英语，晚上是听不进去的并行计算，下午也就把目前正在记录的这道题稍微看了看，至于为啥要写点东西记下来呢？因为这种算法思路我好像并不常有，就比如上次那个删除重复值的思路（双指针那个），我同样也不怎么能想得到，所以呢，就笔头勤点，写下来可以经常看看，老话说得好，熟练于心嘛～ 现在已经是晚上23点以后了，别问我为啥到现在还没睡，原因很简单，因为我现在还不想睡，我的手机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单调栈真的蛮好用的呢～">
+<meta property="og:url" content="https://makiru.top/blog/article/e1ba697.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="又是一天枯燥无味的课，上午是憨批的学术英语，晚上是听不进去的并行计算，下午也就把目前正在记录的这道题稍微看了看，至于为啥要写点东西记下来呢？因为这种算法思路我好像并不常有，就比如上次那个删除重复值的思路（双指针那个），我同样也不怎么能想得到，所以呢，就笔头勤点，写下来可以经常看看，老话说得好，熟练于心嘛～ 现在已经是晚上23点以后了，别问我为啥到现在还没睡，原因很简单，因为我现在还不想睡，我的手机">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/202202232333011.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/202202240003320.jpeg">
+<meta property="og:image" content="https://cdn.makiru.top/images/202202241134238.png">
+<meta property="article:published_time" content="2022-02-23T14:52:48.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:30:55.245Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/202202232333011.png">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/e1ba697.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/e1ba697.html","path":"article/e1ba697.html","title":"单调栈真的蛮好用的呢～"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>单调栈真的蛮好用的呢～ | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">暴力解法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E8%B0%83%E6%A0%88%E2%80%94%E4%B8%A4%E6%AC%A1%E9%81%8D%E5%8E%86"><span class="nav-number">2.2.</span> <span class="nav-text">单调栈—两次遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E8%B0%83%E6%A0%88%E2%80%94%E9%81%8D%E5%8E%86%E4%B8%80%E6%AC%A1"><span class="nav-number">2.3.</span> <span class="nav-text">单调栈—遍历一次</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">3.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/e1ba697.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="单调栈真的蛮好用的呢～ | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          单调栈真的蛮好用的呢～
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2022-02-23 22:52:48" itemprop="dateCreated datePublished" datetime="2022-02-23T22:52:48+08:00">2022-02-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/e1ba697.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/e1ba697.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/e1ba697.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.1k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>又是一天枯燥无味的课，上午是憨批的学术英语，晚上是听不进去的并行计算，下午也就把目前正在记录的这道题稍微看了看，至于为啥要写点东西记下来呢？因为这种算法思路我好像并不常有，就比如上次那个删除重复值的思路（双指针那个），我同样也不怎么能想得到，所以呢，就笔头勤点，写下来可以经常看看，老话说得好，熟练于心嘛～</p>
+<p>现在已经是晚上23点以后了，别问我为啥到现在还没睡，原因很简单，因为我现在还不想睡，我的手机正在forest上种树呢，所以即使我现在到床上去也只能在手机上看天气之类的应用（推荐forest，下次给大家伙看看我的森林，可以摆脱手机控～），所以呢，就随便写写，反正也只是未来的自己看看……..</p>
+<p><img data-src="https://cdn.makiru.top/images/202202232333011.png"></p>
+<span id="more"></span>
+
+<p>终于硬是扛到了0点以后了，好了，不写了，明天上午等我爬起来之后再继续写吧，，其实也就是适当地拿leetcode上的一道题来讲一下单调栈的使用，以及它究竟可以用来做些什么。从名字上来看，这是一个栈，并且栈中的元素应该都是单调放入的。</p>
+<h3 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h3><p>给定 <em>n</em> 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p>
+<p>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p>
+<p>示例：</p>
+<p><img data-src="https://cdn.makiru.top/images/202202240003320.jpeg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：heights = [2,1,5,6,2,3]</span><br><span class="line">输出：10</span><br><span class="line">解释：最大的矩形为图中红色区域，面积为 10</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>其实呢，这道题拿到手后，我第一想到的就是：我去，这道题咋这么眼熟，之前好像也在哪看过这歌柱状图，想了好长时间才想起，原来是之前做的那道接雨水的题。。。</p>
+<p>然后呢，我连暴力解法都没想起来，这就是越做题越倒退嘛？？</p>
+<h4 id="暴力解法"><a href="#暴力解法" class="headerlink" title="暴力解法"></a>暴力解法</h4><p>自己想一想，暴力解法也不是很难，思路比较直接，既然是要寻找面积最大的矩形，那就以每根柱子为开始，向两边延伸（延伸：指以当前柱子高度往左右画条水平线，直到左右都有柱子高度没有达到水平线结束）</p>
+<p>简单点来说，就是对每个柱子往左往右找到第一个小于自己高度的柱子，以举例来说，heights[4] &#x3D; 2，往左比其小的第一个是heights[1]，往右则是没有比其小的；</p>
+<p>代码我就不写了，因为很简单，至于找第一个最小的要么直接遍历要么二分法查找都是可以的。</p>
+<h4 id="单调栈—两次遍历"><a href="#单调栈—两次遍历" class="headerlink" title="单调栈—两次遍历"></a>单调栈—两次遍历</h4><p>单调栈的含义已经在前面说过了，这里不作解释；至于这道题为什么能牵扯到单调栈，可以思考下面这句话：</p>
+<blockquote>
+<p>如果柱子从左到右是单调增高的，那么对任何一个柱子而言，其左边第一个比其小的就是它的左侧邻居；那么如果有一个数据结构，能够保存这些柱子（不是单调增高的）中那些逐渐变高的柱子index的话，针对当前处理的柱子，想要找到它左侧第一个小于它的柱子就会很简单（因为保存的数据中只要最后一个index的高度小于当前柱子高度，那它就是答案，否则依次往前找到比当前柱子高度小的即可）。</p>
+</blockquote>
+<p><font color=red>注意：这里的单调是严格单调，下面还会有方法里的不是严格单调</font></p>
+<p>至于标题中的两次遍历，想必大家也都明白为啥是两次（额，其实就是找到左边边界与右边边界）</p>
+<p>还是以示例来解释下操作流程（2，1，5，6，2，3）：</p>
+<ul>
+<li>首先我们需要两个结构来保存每根柱子的左边界与右边界，简单记为left与right（这里记录的是下标索引，也可以直接记录高度）</li>
+<li>处理第一根柱子，高度为2，它左边没有柱子，因此为了计算面积方便统一，我们给其左边界赋值为-1（<font color=red>哨兵</font>），并将第一根柱子的下标索引0放入我们用来保存递增index的结构—<font color=red>单调栈</font>，目前栈内为【0】，left为【-1】</li>
+<li>处理第二根柱子，高度为1，这时单调栈的作用就可以看见了，我们用当前柱子高度1与栈顶的柱子高度（2）比较，发现栈顶柱子比当前柱子高，那栈顶的肯定不是当前柱子的左边界（用最笨的话解释左边界：[1，2，5，3，4]，3的左边界是2），既然不是，就把栈顶的柱子丢了，看下一个栈顶是不是左边界，结果发现，丢完后，栈空了，这就表明当前柱子没有左边界，和第一根柱子一样，我们给其left[1]赋值为-1，并将当前柱子下标1入栈，目前栈内为【1】，left为【-1，-1】</li>
+<li>处理第三根柱子，高度为5，栈顶柱子高度为1，由于当前柱子高度大于栈顶的，所以栈顶的就是当前柱子的左边界，将栈顶的下标值赋予当前柱子left之后，将当前柱子下标入栈，目前栈内为【1，2】，left为【-1，-1，1】</li>
+<li>以此类推可以得到：left为【-1，-1，1，2，1，4】</li>
+<li>按照同样的方法，从右往左遍历一次，可以得到：right为【6，6，4，4，6，1】，注意：这里的6也是<font color=red>哨兵</font></li>
+<li>计算结束后，就是统计最大矩形面积，这时，只需要计算以每根柱子往左右延伸的最大面积即可，举个简单的例子，第三根柱子高度为5，它的左边界为1，右边界为4，因此，面积就是（4 - 1 - 1） * 5 &#x3D; 10，以此类推即可获得最大矩形面积</li>
+</ul>
+<p>关键代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">//初始化哨兵</span></span><br><span class="line">    stack.push(-<span class="number">1</span>);</span><br><span class="line"><span class="comment">//从左往右遍历</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; len; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(stack.peek() == -<span class="number">1</span>)&#123;</span><br><span class="line">            left[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (stack.peek() != -<span class="number">1</span> &amp;&amp; heights[stack.peek()] &gt;= heights[i])&#123;</span><br><span class="line">                stack.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            left[i] = stack.peek();</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从右往左遍历</span></span><br><span class="line">    stack.clear();</span><br><span class="line">    stack.push(len);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> len - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(stack.peek() == len)&#123;</span><br><span class="line">            right[i] = len;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">while</span> (stack.peek() != len &amp;&amp; heights[stack.peek()] &gt;= heights[i])&#123;</span><br><span class="line">                stack.pop();</span><br><span class="line">            &#125;</span><br><span class="line">            right[i] = stack.peek();</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="单调栈—遍历一次"><a href="#单调栈—遍历一次" class="headerlink" title="单调栈—遍历一次"></a>单调栈—遍历一次</h4><p>上面的思路会遍历两次，那是不是可以只遍历一次呢，答案是可以的，其实很明显，上面遍历两次是因为我们需要获得left与right，那是不是只要在获得left的同时，获得right不就好了吗，确实是这样，下面遍历一次的思路，需要了解下面这段话：</p>
+<blockquote>
+<p>假设我们正在处理heights[i]，这时通过判断（heights[i]小于等于栈顶的高度），所以按照上面那种方法思路，是不是需要将栈顶的pop出来，没错吧～那对于栈顶的值来说，可不可以认为当前的heights[i]就是其右边界呢？首先需要明确，当前的i与栈顶值之间是不存在一个j（栈顶值&lt;j&lt;i），使得heights[j]小于等于栈顶的高度的，因为如果存在，那么在处理heights[j]时，栈顶的那个值早已经被pop了，所以可以理解成，i是栈顶值右侧第一个在高度上小于等于它的值（注意是小于等于）</p>
+</blockquote>
+<p>还是举个简单的例子吧，[2，3，1，5，5，5，6，2]</p>
+<p>当我们处理第一个5的时候，栈内是【2】，我们可以顺利得到这个5的左边界为2，对于栈顶的2我们暂时没法得到其“右边界”，因为它还没有到被弹出去的时候（<font color=red>记住这里</font>），第一个5处理完后将其入栈，栈内为【2，3】，处理第二个5时，我们发现栈顶的高度和其是相等的，因此，是需要被弹出的（<font color=red>因为这里是严格单调的，即栈内不存在相等的值</font>），既然栈顶的值要被弹出了，所以按照上述的分析我们可以得到栈顶值的“右边界”就应该是第二个5，不知道你们有没有发现，这里对于栈顶的5而言，它所获得的“右边界”是不对的，因为其真实的右边界应该是最末尾的那个2。</p>
+<p>所以呢，这里对于第一个5，我们没有获得真实的右边界，这样会影响答案吗？实际上，自己想一想，究竟什么时候会获得不真实的右边界呢？只有当当前处理的值与栈顶值是相等的时候才会赋予栈顶值不真实的右边界，既然这样，那针对当前的值而言，只要后面会出现一个小于它的值（也就是当前的值需要被pop的时候），它就可以获得真实的右边界，而当前值与最初栈顶与其相等的那个值真实意义上能获得的最大矩形面积是相等的。</p>
+<p>举例来说，当第二个5处理完入栈后，栈内为【2，4】，第三个5依旧与栈顶值相等，所以对于栈顶的值，也就是第二个5而言，依然会获得不真实的右边界（第三个5），第三个5处理完后，入栈，栈内为【2，5】，当处理6的时候，正常处理，栈内为【2，5，6】，处理最后一个2时，栈顶值的高度为6，所以需要被pop，那6的右边界就是当前处理的2，pop后，栈顶变为5，其高度值也为5（第三个），依旧需要被pop，所以第三个5的右边界就是最后一个2（真实的右边界），总之，三个5，只有最后一个5会获得真实右边界，不过这三个5所能获得的最大矩形面积是相等的，所以并不影响最终的答案。</p>
+<p><font color=red>也就是说，这里的左边界一定是真实的，右边界不一定真实，不过不影响最后结果</font></p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">largestRectangleArea</span><span class="params">(<span class="type">int</span>[] heights)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> heights.length;</span><br><span class="line">    <span class="type">int</span>[] new_height = <span class="keyword">new</span> <span class="title class_">int</span>[len + <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= len; i++)&#123;</span><br><span class="line">        new_height[i] = heights[i - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Deque&lt;Integer&gt; stack = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span>[] left = <span class="keyword">new</span> <span class="title class_">int</span>[len + <span class="number">2</span>];</span><br><span class="line">    <span class="type">int</span>[] right = <span class="keyword">new</span> <span class="title class_">int</span>[len + <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; len + <span class="number">2</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; new_height[stack.peek()] &gt;= new_height[i])&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> stack.pop();</span><br><span class="line">            right[temp] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        left[i] = stack.isEmpty() ? -<span class="number">1</span> : stack.peek();</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; len + <span class="number">1</span>; i++)&#123;</span><br><span class="line">        ans = Math.max(ans, new_height[i] * (right[i] - left[i] - <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意代码中有步操作：将原数组中的值移到了新数组中，也就是在原数组前后各加了个0，意义如下：</p>
+<p>前面的0: 保证数组中所有的值都是大于等于它的，其实在上述代码中，可以没有前面这个0，这里加个0是因为其实可以没必要将left与right的值保存起来再来计算，为什么呢，<font color=red>不知道你有没有发现，每次需要弹出的时候，对于弹出的那个值而言，它的左边界与“右边界”（不真实，无影响）都是知道的了，那么为什么不可以直接计算它的最大面积呢？</font>而加的这个前置0就是为了当栈内只有一个真实有效的值的时候，并且它需要被弹出，这时可以直接计算它的最大面积，因为即使弹出后，栈顶依旧有值而不是栈空，这时或许有人会问，那会不会前置0也被弹出呢？会，只有当遇到0的时候，不过没关系，因为这时对于栈顶的0而言，计算出来的值一定是0，不影响结果，不过还是需要判断下栈空，因为0弹出后stack.peek()是会报错的。</p>
+<p>后面的0: 保证最后栈内所有有效值都会被弹出，以获得其右边界</p>
+<p>不知道大家有没有注意到，我们的栈内是不允许有重复值的，也就是严格单调的，但其实呢，单纯单调的话也是可以计算的，只是这时获得的左边界不一定是真实的而已，与上面是一样的原因，也不会影响最终结果。</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">largestRectangleArea</span><span class="params">(<span class="type">int</span>[] heights)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> heights.length;</span><br><span class="line"></span><br><span class="line">    Deque&lt;Integer&gt; stack = <span class="keyword">new</span> <span class="title class_">ArrayDeque</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span>[] new_height = <span class="keyword">new</span> <span class="title class_">int</span>[len + <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; len + <span class="number">1</span>; i++)&#123;</span><br><span class="line">        new_height[i] = heights[i - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; len + <span class="number">2</span>; i++)&#123;</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; new_height[stack.peek()] &gt; new_height[i])&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> stack.pop();</span><br><span class="line">            ans = Math.max(ans, new_height[temp] * (i - stack.peek() - <span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        stack.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里就没有将边界值保存起来，而是每次只要栈顶值会弹出时，直接计算栈顶的最大面积，因此，我们必须保证所有的值都会出栈，所以才会在原数组后面加个0（0一定小于任何有效值）；除此之外，while循环中的判断条件将&gt;&#x3D;改为了&gt;，表示，栈内是可以保存连续重复值的。</p>
+<p><font color=red>哨兵值的使用，会使程序很大程度上简洁，比如说，如果上面的代码中，没有哨兵值（前后的0），那么我们在计算ans之前必须判断栈是否为空，必须手动将最后栈内的所有值弹出并计算最大面积。因此，哨兵值的使用很重要～</font></p>
+<p><font color=red>除此之外，计算对象的选择，也是很重要的，像我上面两种方式，一个计算对象是当前的heights[i]，一个是heights[stack.peek()]，前者必须将所有的left与right计算完才能计算，后者只需要在栈顶被弹出的时候就可以计算</font></p>
+<p>其实呢，我们也可以在保持左边界一定真实的情况下，计算栈顶最大面积，只不过这种情况下需要判断栈空而已。</p>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>在java中，能用Deque的时候尽量别用stack，因为你会这样：</p>
+<p><img data-src="https://cdn.makiru.top/images/202202241134238.png"></p>
+<p>用时长的就是stack，短的就是deque，优劣一眼就可以看出来～</p>
+<p>写点有点多了，很多都是废话，只是给笨笨的博主当备忘录而已～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/454a25b2.html" rel="prev" title="双指针解决去重问题">
+                  <i class="fa fa-chevron-left"></i> 双指针解决去重问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/7fab9ad3.html" rel="next" title="kd树与KNN方面的小小认识">
+                  kd树与KNN方面的小小认识 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/e1ba697.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="今天呢，有点小特殊，为什么这么说呢，因为这是我第一次在寝室里写这种博文。或许有人会问，为什么这就算特殊呢？哈哈哈，因为博主是一个好动的人，几乎不咋呆寝室，这次是因为紧急情况（宿舍楼被封了，，疫情真讨厌～） 这次想说的是我正在读的一本书（统计学习方法）中的一个小点—kd树在knn中的应用。其实呢，这在机器学习这个领域内算是入门级别的知识，我就单纯记点我的想法（望大佬勿喷）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kd树与KNN方面的小小认识">
+<meta property="og:url" content="https://makiru.top/blog/article/7fab9ad3.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="今天呢，有点小特殊，为什么这么说呢，因为这是我第一次在寝室里写这种博文。或许有人会问，为什么这就算特殊呢？哈哈哈，因为博主是一个好动的人，几乎不咋呆寝室，这次是因为紧急情况（宿舍楼被封了，，疫情真讨厌～） 这次想说的是我正在读的一本书（统计学习方法）中的一个小点—kd树在knn中的应用。其实呢，这在机器学习这个领域内算是入门级别的知识，我就单纯记点我的想法（望大佬勿喷）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/202203091547231.jpg">
+<meta property="og:image" content="https://cdn.makiru.top/images/202203091626878.png">
+<meta property="article:published_time" content="2022-03-09T07:22:52.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:28:04.798Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/202203091547231.jpg">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/7fab9ad3.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/7fab9ad3.html","path":"article/7fab9ad3.html","title":"kd树与KNN方面的小小认识"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>kd树与KNN方面的小小认识 | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#kd%E6%A0%91%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">kd树的介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KNN%E7%AE%97%E6%B3%95%E7%9A%84%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">KNN算法的简单介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BAkd%E6%A0%91%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">构建kd树的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KNN%E6%9C%80%E8%BF%91%E9%82%BB%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">4.</span> <span class="nav-text">KNN最近邻算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">5.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/7fab9ad3.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="kd树与KNN方面的小小认识 | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          kd树与KNN方面的小小认识
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2022-03-09 15:22:52" itemprop="dateCreated datePublished" datetime="2022-03-09T15:22:52+08:00">2022-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/7fab9ad3.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/7fab9ad3.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/7fab9ad3.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>今天呢，有点小特殊，为什么这么说呢，因为这是我第一次在寝室里写这种博文。或许有人会问，为什么这就算特殊呢？哈哈哈，因为博主是一个好动的人，几乎不咋呆寝室，这次是因为紧急情况（宿舍楼被封了，，疫情真讨厌～）</p>
+<p>这次想说的是我正在读的一本书（统计学习方法）中的一个小点—kd树在knn中的应用。其实呢，这在机器学习这个领域内算是入门级别的知识，我就单纯记点我的想法（望大佬勿喷）</p>
+<p><img data-src="https://cdn.makiru.top/images/202203091547231.jpg"></p>
+<span id="more"></span>
+
+<h3 id="kd树的介绍"><a href="#kd树的介绍" class="headerlink" title="kd树的介绍"></a>kd树的介绍</h3><p>首先，kd树可以理解成是一种二叉树，只不过这种二叉树比较特殊而已，至于特殊在哪，还请往下看～</p>
+<p>给出一组数据，可以更好地解释kd树的构成，数据如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">T=&#123;(2,3),(5,4),(9,6),(4,7),(8,1),(7,2)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是一个二维的数据，现在我将使用这些数据演示下kd树的构建过程，这样的话，我觉得可能会更容易理解，在往下看之前，我就先默认大家都清楚平衡二叉树的概念啦</p>
+<p>构建kd树一定要注意维度的概念，就拿T数据举例来说，这个数据中包含了dim &#x3D; 0与dim &#x3D; 1（因为是二维的嘛）</p>
+<p>构建过程：</p>
+<ul>
+<li>dim &#x3D; 0: 将T中的数据按照第0维的数字先排个序，排完序之后为：T &#x3D; {(2,3),(4,7),(5,4),(7,2),(8,1),(9,6)}，接下来呢，取中位数（7，2）作为kd树的根节点，注意：<font color=red>这里是向下取整</font>，中位数左边的呢，作为根节点的左子树节点，右边的自然就是右子树啦</li>
+<li>先看左子树，T_left &#x3D; {(2,3),(4,7),(5,4)}，按照同样的原理，只不过这次看的不是第0维，而是<font color=red>第1维</font>，将T_left按照第1维数字的大小进行排序，即T_left &#x3D; {(2,3),(5,4),(4,7)}，取中位数（4，7）作为左子树的根节点，其左右分别作为该节点的左右子树</li>
+<li>继续看左子树，T_left’ &#x3D; {(2,3)}，这时看的维度又需要变回第0维，相信聪明的小伙伴，已经看出，维度的变化在于树的深度与给定数据的维度之间的某种关系：深度 % 维度</li>
+<li>右子树的构建也是如此，只是需要注意，<font color=red>树每一层看的维度都是一样的</font></li>
+</ul>
+<img data-src="https://cdn.makiru.top/images/202203091626878.png" alt="" style="zoom:50%;" />
+
+<p>也许细心的同学已经发现，在建树的过程中，维度依据的变化是不是并不太合理呢？确实是这样的，因为如果只是按照顺序来选择特征维度（可以把每个维度理解成一种特征类型或者特征标签），是不是并不能保证划分数据或者实例点很简单呢？因此，后面有人想出了一个方法，既然想要更容易区分，那这不正好符合方差的定义嘛，没错，在每一次选择节点的时候，依据维度的选择不再是简单的按照顺序来判断，而是先判断下<font color=red>当前数据集中哪一个维度的数字方差更大，越大表示越容易区分</font>.</p>
+<h3 id="KNN算法的简单介绍"><a href="#KNN算法的简单介绍" class="headerlink" title="KNN算法的简单介绍"></a>KNN算法的简单介绍</h3><p>KNN算法，全称为k近邻算法，它主要是用来做分类预测的，所依据的无非是多数决策的手段，简单点来说，就是指判断一个数据点的时候，先找到它的k个最近的邻居，看看这k个邻居中哪种类别占多数，那这个数据点就会被划分到那一类。</p>
+<p>既然要找k个最近的邻居，就要牵扯到距离的定义，一般情况下，我们常用的就是欧式距离等等，具体有哪些距离，可以看看下面<br>$$<br>L_p(x_i,x_j) &#x3D; (\sum_{l&#x3D;1}^n |x_i^{(l)} - x_j^{(l)}|^p)^{\frac{1}{p}}<br>$$<br>（1）p &#x3D; 2时，该距离便是欧式距离</p>
+<p>（2）p &#x3D; 1时，该距离为曼哈顿距离</p>
+<p>（3）p &#x3D; 无穷时，该距离为切比雪夫距离<br>$$<br>L_p(x_i,x_j) &#x3D; max_i(|x_i - x_j|)<br>$$<br>怎么说呢，老实说，KNN算法在理解上是很简单的，只是它需要快速地找到与target最近的邻居，因此如果只是单纯地去寻找是不可接受的（复杂度过高），这时就需要使用kd树出场啦，怎么使用呢，我们依旧以上面的那棵kd树来举例说明</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">target = (2, 4.5)</span><br><span class="line"></span><br><span class="line">kd tree: 上图</span><br></pre></td></tr></table></figure>
+
+<p>第一步，和平衡二叉树是很类似的去查找，只不过这里需要将维度也考虑进去，比如说，从树的根节点开始，由于这一层的维度是0，所以将target[0]与根节点的第0维数据比较，大于则去右子树查找，反之，左子树查找</p>
+<p>第二步，找到叶节点(4, 7)，此时将该节点看成是最近点，计算其与目标值的距离，依次回溯之前的查找路径，也就是(5, 4)，判断其与target的距离是否小于最短距离，如果是，则将该点重新看成最近点，再检查该节点（叶节点的父节点）的另外一个子节点，如果该节点在以target为圆心，最短距离为半径的圆内，那么表示该子节点离target更近，因此需要递归地去查找这个子树（和之前一样，直到找到叶节点），如果不在，就直接去判断父节点的父节点（依次回溯），<font color=red>注意：无论父节点是否比当前最近点离target近，都需要去判断父节点的另一子节点是否在圆内</font></p>
+<p>第三步，直到回溯到根节点，当前的最近点就是target的最近邻</p>
+<p>比较关键的地方在于，需要判断当前节点的父节点的另一子节点是否需要去search，这里涉及到递归的含义。当然，这里只是找到一个最近邻而已，我们需要找到k个近邻，因此至少需要查找k次，每一次的复杂度在log(n)，k次就是klog(n)，n为节点的个数</p>
+<h3 id="构建kd树的实现"><a href="#构建kd树的实现" class="headerlink" title="构建kd树的实现"></a>构建kd树的实现</h3><p>先上代码吧，有点小傻，别笑，我写完后，看了下网上的思路，都要么是利用了方差，要么就是想的比我简洁点，待会说下简洁的地方在哪</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Node</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    <span class="comment"># 节点类</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, val=-<span class="number">1</span>, dim=<span class="number">0</span>, lchild=<span class="literal">None</span>, rchild=<span class="literal">None</span></span>):</span><br><span class="line">        self.val = val</span><br><span class="line">        self.dim = dim</span><br><span class="line">        self.lchild = lchild</span><br><span class="line">        self.rchild = rchild</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建树</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_tree</span>(<span class="params">self, nodes, i, left, right</span>):</span><br><span class="line">    <span class="keyword">if</span> left &gt;= right:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> i == <span class="built_in">len</span>(nodes[<span class="number">0</span>]):</span><br><span class="line">        i = <span class="number">0</span></span><br><span class="line">    nodes_temp = <span class="built_in">sorted</span>(nodes[left:right], key=<span class="keyword">lambda</span> x: x[i])</span><br><span class="line">    nodes[left:right] = nodes_temp</span><br><span class="line">    index = <span class="built_in">int</span>((right + left) / <span class="number">2</span>)</span><br><span class="line">    root = Node(nodes[index], i)</span><br><span class="line">    root.lchild = self.create_tree(nodes, i + <span class="number">1</span>, left, index)</span><br><span class="line">    root.rchild = self.create_tree(nodes, i + <span class="number">1</span>, index + <span class="number">1</span>, right)</span><br><span class="line">    <span class="keyword">return</span> root</span><br></pre></td></tr></table></figure>
+
+<p>其实呢，这也可以看成是一个简单的构建二叉树的过程，只不过是需要加上数据的选择罢了，以往的构建二叉树，只需要将给定的数据按照二叉树的结构放进去就可以，现在需要考虑到数据之间的“大小关系”，可以看到，代码中的参数包括了left与right，这就是为了判断当前需要判断数据的列表是从哪里到哪里使用的，以及为了计算中位数的下标使用的（后面的是主要），结果看了网上的代码，我彻底呆了～</p>
+<p>为啥呢，因为python中如果只想用某个数组的一部分，可以直接这样：nodes[:medium_index]之类的，至于求中位数嘛，我傻了，可以直接用len(nodes) &#x2F; 2来获取，哈哈哈哈～</p>
+<h3 id="KNN最近邻算法实现"><a href="#KNN最近邻算法实现" class="headerlink" title="KNN最近邻算法实现"></a>KNN最近邻算法实现</h3><p>老样子，先上代码，不一定对，感觉像是对的（虽然没啥信心）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_dis</span>(<span class="params">self, a, b</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(a) != <span class="built_in">len</span>(b):</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">    <span class="comment"># 采用欧式距离</span></span><br><span class="line">    dis = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(a)):</span><br><span class="line">        dis += (a[i] - b[i]) * (a[i] - b[i])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> math.sqrt(dis)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 最近邻</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, target, root, path</span>):</span><br><span class="line">    <span class="keyword">global</span> visited</span><br><span class="line">    <span class="keyword">global</span> nearest_point</span><br><span class="line">    <span class="keyword">global</span> min_dis</span><br><span class="line">    <span class="comment"># 顺序查找直到叶节点</span></span><br><span class="line">    <span class="keyword">while</span> root <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">        path.append(root)</span><br><span class="line">        <span class="keyword">if</span> target[root.dim] &lt; root.val[root.dim]:</span><br><span class="line">            root = root.lchild</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            root = root.rchild</span><br><span class="line">    <span class="comment"># 回溯</span></span><br><span class="line">    <span class="keyword">while</span> <span class="built_in">len</span>(path) != <span class="number">0</span>:</span><br><span class="line">        point = path.pop()</span><br><span class="line">        dis = self.get_dis(point.val, target)</span><br><span class="line">        visited.append(point)</span><br><span class="line">        <span class="keyword">if</span> dis &lt; min_dis:</span><br><span class="line">            nearest_point = point</span><br><span class="line">            min_dis = dis</span><br><span class="line">        <span class="comment"># 回退到根节点，直接返回</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(path) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">if</span> point.lchild <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.get_dis(target, point.lchild.val) &lt; min_dis <span class="keyword">and</span> point.lchild <span class="keyword">not</span> <span class="keyword">in</span> visited:</span><br><span class="line">            self.search(target, point.lchild, path)</span><br><span class="line">        <span class="keyword">if</span> point.rchild <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> self.get_dis(target, point.rchild.val) &lt; min_dis <span class="keyword">and</span> point.rchild <span class="keyword">not</span> <span class="keyword">in</span> visited:</span><br><span class="line">            self.search(target, point.rchild, path)</span><br><span class="line">    <span class="keyword">return</span> nearest_point.val</span><br></pre></td></tr></table></figure>
+
+
+
+<p>也没什么好说的，原理就摆在那，除了我不太会搞递归，是真的不太会，脑子总是转不过来（^V^)</p>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>就这样啦，《统计学习方法》这本书还是挺不错的，推荐大家去看看，挺适合没啥基础的同学去看看，哦，对了，下部番快好啦，很快就可以推给大家啦！！！好好期待吧～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/e1ba697.html" rel="prev" title="单调栈真的蛮好用的呢～">
+                  <i class="fa fa-chevron-left"></i> 单调栈真的蛮好用的呢～
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/828b16f2.html" rel="next" title="被封校的那些事儿">
+                  被封校的那些事儿 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/7fab9ad3.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

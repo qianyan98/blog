@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="又是美好的周六，今天的上海天气是真的好，刚好老爸来学校玩了半天不到，我也趁着这个机会在学校里瞎逛了会。学校里呢，这几天也在办一些活动，比如像冬季长跑啦，以前玩的那种脚并着走路啦，巴拉巴拉的许多。 但该干活的时候，还是得干活的，毕竟我可是留了不少ddl在赶的男人～像啥计算机网络的第二次作业啦，最优化的第十二周作业啦，最优的的论文啦，项目进展啦，学术英语第一次作业啦，等等等等，一大堆。。。。不过嘛，在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区间问题">
+<meta property="og:url" content="https://makiru.top/blog/article/13291e9a.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="又是美好的周六，今天的上海天气是真的好，刚好老爸来学校玩了半天不到，我也趁着这个机会在学校里瞎逛了会。学校里呢，这几天也在办一些活动，比如像冬季长跑啦，以前玩的那种脚并着走路啦，巴拉巴拉的许多。 但该干活的时候，还是得干活的，毕竟我可是留了不少ddl在赶的男人～像啥计算机网络的第二次作业啦，最优化的第十二周作业啦，最优的的论文啦，项目进展啦，学术英语第一次作业啦，等等等等，一大堆。。。。不过嘛，在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211204192915093.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/header1.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211204205234265.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211204235243879.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211205000849667.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211205001132631.png">
+<meta property="article:published_time" content="2021-12-04T11:18:15.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:30:44.080Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/image-20211204192915093.png">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/13291e9a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/13291e9a.html","path":"article/13291e9a.html","title":"区间问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>区间问题 | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%B1%BB%E5%9E%8B1-%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6"><span class="nav-number">1.</span> <span class="nav-text">问题类型1: 区间合并</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">问题介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">问题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E7%B1%BB%E5%9E%8B2-%E5%8C%BA%E9%97%B4%E6%8F%92%E5%85%A5"><span class="nav-number">2.</span> <span class="nav-text">问题类型2: 区间插入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">2.1.</span> <span class="nav-text">问题介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%80%9D%E8%B7%AF-1"><span class="nav-number">2.2.</span> <span class="nav-text">问题思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-1"><span class="nav-number">2.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Ebitset%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">关于bitset的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">区间合并的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E6%8F%92%E5%85%A5%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">区间插入的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/13291e9a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="区间问题 | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          区间问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2021-12-04 19:18:15" itemprop="dateCreated datePublished" datetime="2021-12-04T19:18:15+08:00">2021-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/13291e9a.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/13291e9a.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/13291e9a.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>又是美好的周六，今天的上海天气是真的好，刚好老爸来学校玩了半天不到，我也趁着这个机会在学校里瞎逛了会。学校里呢，这几天也在办一些活动，比如像冬季长跑啦，以前玩的那种脚并着走路啦，巴拉巴拉的许多。</p>
+<p>但该干活的时候，还是得干活的，毕竟我可是留了不少ddl在赶的男人～像啥计算机网络的第二次作业啦，最优化的第十二周作业啦，最优的的论文啦，项目进展啦，学术英语第一次作业啦，等等等等，一大堆。。。。不过嘛，在下午的连忙赶工中，目前只剩下几样啦，可以明天或者有空再慢慢搞了，又恢复到了可以写写流水账的时候啦。</p>
+<img data-src="https://cdn.makiru.top/images/image-20211204192915093.png"  />
+
+<span id="more"></span>
+
+<p>今天想把关于区间类的问题做个小小的总结，因为这类问题其实想起来还是很容易出各种变化的题型的～</p>
+<p>今天主要想讲两种类型的区间问题：</p>
+<ol>
+<li>区间合并</li>
+<li>区间插入</li>
+</ol>
+<p>至于区间重叠判断，，应该是最简单的了吧～就不用多讲了</p>
+<p>在讲这两种问题前，我先简单介绍下这几天，，也不对，是最近学到的一种结构类型吧，名字叫做<font color=red>“bitset”</font></p>
+<p>关于bitset的解释，我还是选择使用示例来讲，看下面这幅图就大概懂这个类型的用法了：</p>
+<img data-src="https://cdn.makiru.top/images/header1.png" style="zoom:50%;" />
+
+<p>这幅图是我在代码中用到的，首先解释下里面的这些2，3，等值代表什么意思，这些值其实是你原本数组或者其他结构里面的索引，存到bitset里，并且这些值的位置都是被赋予了true。如果还是不太懂，更简单点，就是说2,3,4,5……..36这些值对应的都是true，其他的都是false</p>
+<p>关于bitset有三个方法比较常用，一个是nextSetBit()，一个是nextClearBit()，一个是set方法，举例说明这三方法的含义：</p>
+<p>nextSetBit(13)：返回的是16，因为16是比13大，并且设置为true的（这里可以包括13）</p>
+<p>nextClearBit(16)：返回的是21，因为21比16大，并且设置为false（同样可以包括16）</p>
+<p>bitSet.set(0, 3, true): 会在bitset里加入0,1,2</p>
+<p>说到这里，想必大家也明白我为什么要先讲这个结构了吧～没错，这个类型在区间问题上是很方便的，因为完全可以把这个bitset看成是坐标轴来使用。</p>
+<p>好了，正式开始两种区间问题的简单介绍～</p>
+<h2 id="问题类型1-区间合并"><a href="#问题类型1-区间合并" class="headerlink" title="问题类型1: 区间合并"></a>问题类型1: 区间合并</h2><h3 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h3><p>以数组intervals表示若干个区间的集合，其中单个区间为 intervals[i] &#x3D; [starti, endi] 。请你合并所有重叠的区间，并返回一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：intervals = [[1,3],[2,6],[8,10],[15,18]]</span><br><span class="line">输出：[[1,6],[8,10],[15,18]]</span><br><span class="line">解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：intervals = [[1,4],[4,5]]</span><br><span class="line">输出：[[1,5]]</span><br><span class="line">解释：区间 [1,4] 和 [4,5] 可被视为重叠区间。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="问题思路"><a href="#问题思路" class="headerlink" title="问题思路"></a>问题思路</h3><p>首先，我们需要做什么，给出一个结果集，用来装区间段，然后就是依次遍历题目给定的多个区间，当然，首先得确保这些区间都是按照区间左端点由低到高的顺序排列的，至于为什么，待会就知道了，具体步骤如下：</p>
+<ol>
+<li><p>当结果集是空 or 目前遍历到的区间的左端点大于结果集最后一个区间的右端点时，直接将该区间加入结果集</p>
+</li>
+<li><p>当遇到目前区间的左端点小于等于结果集最后一个区间的右端点时，表示两者重叠（为啥？画个图你就知道了，这里也就是为啥必须得先排好序才行的原因），既然重叠，那必然是需要合并的啦，至于咋合并，用脚趾头想都能想出来吧，肯定是把结果集中最后一个区间的右端点改下不就好啦，改成啥呢，<font color=red>那得看结果集最后一个区间的右端点与当前区间的右端点谁大了</font>，谁大换谁</p>
+<img data-src="https://cdn.makiru.top/images/image-20211204205234265.png" style="zoom:50%;" /></li>
+</ol>
+<p>上图中的蓝色代表当前区间，黑色表示结果集最后一个区间，从图中就可以看出为什么要在确定合并后区间的右端点时比较大小的原因了。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span>[][] merge(<span class="type">int</span>[][] intervals) &#123;</span><br><span class="line">    <span class="comment">// 先按照区间起始位置排序</span></span><br><span class="line">    Arrays.sort(intervals, (v1, v2) -&gt; v1[<span class="number">0</span>] - v2[<span class="number">0</span>]);</span><br><span class="line">    <span class="comment">// 遍历区间</span></span><br><span class="line">    <span class="type">int</span>[][] res = <span class="keyword">new</span> <span class="title class_">int</span>[intervals.length][<span class="number">2</span>];</span><br><span class="line">    <span class="type">int</span> <span class="variable">idx</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span>[] interval: intervals) &#123;</span><br><span class="line">        <span class="comment">// 如果结果数组是空的，或者当前区间的起始位置 &gt; 结果数组中最后区间的终止位置，说明不重叠。</span></span><br><span class="line">        <span class="comment">// 则不合并，直接将当前区间加入结果数组。</span></span><br><span class="line">        <span class="keyword">if</span> (idx == -<span class="number">1</span> || interval[<span class="number">0</span>] &gt; res[idx][<span class="number">1</span>]) &#123;</span><br><span class="line">            res[++idx] = interval;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 反之说明重叠，则将当前区间合并至结果数组的最后区间</span></span><br><span class="line">            res[idx][<span class="number">1</span>] = Math.max(res[idx][<span class="number">1</span>], interval[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Arrays.copyOf(res, idx + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><font color=red>注意：由于一开始并不知道合并后有多少个区间，因此至少需要原本区间的数量大小，返回时可以直接使用copyOf方法拷贝我们创建的数组中的一部分</font></p>
+<h2 id="问题类型2-区间插入"><a href="#问题类型2-区间插入" class="headerlink" title="问题类型2: 区间插入"></a>问题类型2: 区间插入</h2><h3 id="问题介绍-1"><a href="#问题介绍-1" class="headerlink" title="问题介绍"></a>问题介绍</h3><p>给你一个 <strong>无重叠的</strong> <em>，</em>按照区间起始端点排序的区间列表。</p>
+<p>在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：intervals = [[1,3],[6,9]], newInterval = [2,5]</span><br><span class="line">输出：[[1,5],[6,9]]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]</span><br><span class="line">输出：[[1,2],[3,10],[12,16]]</span><br><span class="line">解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="问题思路-1"><a href="#问题思路-1" class="headerlink" title="问题思路"></a>问题思路</h3><p>从题目上来看，其实这道题相比于前一道题还要简单点，为什么呢，因为题目中给出了区间列表是排好序的，我们只需要将给的新区间放到结果集中，整个过程可以分为三步：</p>
+<ol>
+<li><p>当<font color=red>目前区间的右端点小于新区间的左端点</font>时，直接放入结果集，直到目前区间的右端点大于等于新区间左端点为止。</p>
+</li>
+<li><p>当前区间的右端点大于等于新区间的左端点，表明重叠，这时需要去看新区间的右端点，看看新区间一共将区间列表中的区间覆盖了多少，看看下面的图就懂我这句话的意思了。</p>
+<img data-src="https://cdn.makiru.top/images/image-20211204235243879.png" alt="" style="zoom: 50%;" /></li>
+</ol>
+<p>​		看看上面的图，新区间的右端点8一直扩张到8-10区间，因此，当第一步到区间3-5停止后，<font color=red>只要当前区间的左端点小于等于新区间的右端点（表明重叠）</font>，就将新区间的左右端点进行更换（扩张新区间），至于更换规则，看图说话，左端点选择新区间左端点与当前区间的左端点较小值，右端点选择新区间右端点与当前区间右端点较大值。</p>
+<p>​		更换过程：4-8 &#x3D;&gt; 3-8 &#x3D;&gt; 3-8 &#x3D;&gt; 3-10</p>
+<ol start="3">
+<li>当目前区间到达12-13时，当前区间的左端点已经大于新区间右端点，表明不再重叠，直接加入结果集</li>
+</ol>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span>[][] insert(<span class="type">int</span>[][] intervals, <span class="type">int</span>[] newInterval) &#123;</span><br><span class="line">        <span class="type">int</span>[][] res = <span class="keyword">new</span> <span class="title class_">int</span>[intervals.length + <span class="number">1</span>][<span class="number">2</span>];</span><br><span class="line">        <span class="type">int</span> <span class="variable">idx</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 遍历区间列表：</span></span><br><span class="line">        <span class="comment">// 首先将新区间左边且相离的区间加入结果集</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; intervals.length &amp;&amp; intervals[i][<span class="number">1</span>] &lt; newInterval[<span class="number">0</span>]) &#123;</span><br><span class="line">            res[idx++] = intervals[i++];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 接着判断当前区间是否与新区间重叠，重叠的话就进行合并，直到遍历到当前区间在新区间的右边且相离，</span></span><br><span class="line">        <span class="comment">// 将最终合并后的新区间加入结果集</span></span><br><span class="line">        <span class="keyword">while</span> (i &lt; intervals.length &amp;&amp; intervals[i][<span class="number">0</span>] &lt;= newInterval[<span class="number">1</span>]) &#123;</span><br><span class="line">            newInterval[<span class="number">0</span>] = Math.min(intervals[i][<span class="number">0</span>], newInterval[<span class="number">0</span>]);</span><br><span class="line">            newInterval[<span class="number">1</span>] = Math.max(intervals[i][<span class="number">1</span>], newInterval[<span class="number">1</span>]);</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        res[idx++] = newInterval;</span><br><span class="line">        <span class="comment">// 最后将新区间右边且相离的区间加入结果集</span></span><br><span class="line">        <span class="keyword">while</span> (i &lt; intervals.length) &#123;</span><br><span class="line">            res[idx++] = intervals[i++];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Arrays.copyOf(res, idx);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="关于bitset的使用"><a href="#关于bitset的使用" class="headerlink" title="关于bitset的使用"></a>关于bitset的使用</h2><p>说了这么多，都没有用到bitset，肯定有人会说那开头讲这个是为了什么呢？？？别急，讲了的肯定都有用</p>
+<h3 id="区间合并的使用"><a href="#区间合并的使用" class="headerlink" title="区间合并的使用"></a>区间合并的使用</h3><p>实际上思路是很简单的，只需要将题目中给的区间列表依次用set的方法放入bitset中，完全放入后，再遍历bitset（当然是用nextSetBit和nextClearBit的方法啦～），使用nextSetBit的方法获取区间的左端点，nextClearBit的方法获取区间的右端点（<font color=red>有几个需要注意的点，在代码后面会解释</font>）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span>[][] merge(<span class="type">int</span>[][] intervals) &#123;</span><br><span class="line">    <span class="type">BitSet</span> <span class="variable">bitSet</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BitSet</span>();</span><br><span class="line">    <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span>[] interval : intervals) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> interval[<span class="number">1</span>] * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        bitSet.set(interval[<span class="number">0</span>] * <span class="number">2</span>, temp, <span class="literal">true</span>);</span><br><span class="line">        max = temp &gt;= max ? temp : max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>, count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (index &lt; max) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> bitSet.nextSetBit(index);</span><br><span class="line">        <span class="type">int</span> <span class="variable">end</span> <span class="operator">=</span> bitSet.nextClearBit(start);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] item = &#123;start / <span class="number">2</span>, (end - <span class="number">1</span>) / <span class="number">2</span>&#125;;</span><br><span class="line">        intervals[count++] = item;</span><br><span class="line"></span><br><span class="line">        index = end;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span>[][] ret = <span class="keyword">new</span> <span class="title class_">int</span>[count][<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">        ret[i] = intervals[i];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意点:  <font color=red>说好的是将区间放入bitset里，为什么代码里写的是将区间左端点乘2，右端点乘2加1放入bitset呢？</font>原因很简单，我画个图你就明白了</p>
+<p><img data-src="https://cdn.makiru.top/images/image-20211205000849667.png"></p>
+<p>假设有两个区间1-3和4-6，如果直接放入bitset，结果就是1,2,3,4,5,6全部都是true，然后合并区间时，会发现在bitset里无法区分这两个本来分离的区间，因此需要借助乘2来增加间距</p>
+<p><img data-src="https://cdn.makiru.top/images/image-20211205001132631.png"></p>
+<p>结果就是如上图所示，最后放入bitset里的结果就是2,3,4,5,6,8,9,10,11,12，因此可以很清楚的利用nextSetBit(0) 获得2，nextClearBit(2)获得7，再对其进行之前为加间距做的操作的逆操作即可，同理，8-12也是一样</p>
+<h3 id="区间插入的使用"><a href="#区间插入的使用" class="headerlink" title="区间插入的使用"></a>区间插入的使用</h3><p>关于这种类型的使用，其实原理上与上面的是差不多的，也都是将所有的区间依次放入bitset，包括新区间，最后再进行区间合并与分离</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span>[][] insert(<span class="type">int</span>[][] intervals, <span class="type">int</span>[] newInterval) &#123;</span><br><span class="line">    <span class="type">BitSet</span> <span class="variable">bitSet</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BitSet</span>();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span>[] interval : intervals)&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">temp</span> <span class="operator">=</span> <span class="number">2</span>*interval[<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line">        bitSet.set(<span class="number">2</span>*interval[<span class="number">0</span>],temp,<span class="literal">true</span>);</span><br><span class="line">        max = max &gt; temp ? max : temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    bitSet.set(<span class="number">2</span>*newInterval[<span class="number">0</span>],<span class="number">2</span>*newInterval[<span class="number">1</span>]+<span class="number">1</span>,<span class="literal">true</span>);</span><br><span class="line">    max = max &gt; <span class="number">2</span>*newInterval[<span class="number">1</span>]+<span class="number">1</span> ? max : <span class="number">2</span>*newInterval[<span class="number">1</span>]+<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>, count = <span class="number">0</span>;</span><br><span class="line">    List&lt;<span class="type">int</span>[]&gt; ret = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span>(index &lt; max)&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> bitSet.nextSetBit(index);</span><br><span class="line">        <span class="type">int</span> <span class="variable">end</span> <span class="operator">=</span> bitSet.nextClearBit(start);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] item = &#123;start/<span class="number">2</span>,(end-<span class="number">1</span>)/<span class="number">2</span>&#125;;</span><br><span class="line"></span><br><span class="line">        ret.add(item);</span><br><span class="line">        count++;</span><br><span class="line">        index = end;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span>[][] ans = <span class="keyword">new</span> <span class="title class_">int</span>[count][<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;count;i++)&#123;</span><br><span class="line">        ans[i] = ret.get(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意点与上面的是一样的，注意区间间距的分离</p>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>以上就是关于区间问题的大体介绍了，按我的想法来看，只要是区间类的问题，都可以无脑使用bitset的方法来写，十有八九能AC（瞎猜的，别介意～）</p>
+<p>至于这几天的番嘛，就快了，就快了～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/5869fdc.html" rel="prev" title="通配符匹配—动态规划">
+                  <i class="fa fa-chevron-left"></i> 通配符匹配—动态规划
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/44480b7f.html" rel="next" title="因为太怕痛就全点防御力了">
+                  因为太怕痛就全点防御力了 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/13291e9a.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

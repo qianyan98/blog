@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="今天要记的题目是关于动态规划的两道题，没错，两道题，因为很类似，所以就放一起记了 相信很多人应该都有类似的感觉（卧槽，原来是这样的嘛？这递推公式也不怎么难嘛—做题前；额，，额，这递推公式咋想啊～—做题时）。动态规划，主要的在于当你拿到一道题时，要能想到使用动态规划（很多情况，我都是直接硬怼，递归走起，结果不是超时就是错误），其次是能够将问题的细节想明白，将流程中的一小步拿出来单独去看，最后，将这一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通配符匹配—动态规划">
+<meta property="og:url" content="https://makiru.top/blog/article/5869fdc.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="今天要记的题目是关于动态规划的两道题，没错，两道题，因为很类似，所以就放一起记了 相信很多人应该都有类似的感觉（卧槽，原来是这样的嘛？这递推公式也不怎么难嘛—做题前；额，，额，这递推公式咋想啊～—做题时）。动态规划，主要的在于当你拿到一道题时，要能想到使用动态规划（很多情况，我都是直接硬怼，递归走起，结果不是超时就是错误），其次是能够将问题的细节想明白，将流程中的一小步拿出来单独去看，最后，将这一">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211115211944186.png">
+<meta property="og:image" content="https://cdn.makiru.top/images/20211114105939.jpg">
+<meta property="og:image" content="https://cdn.makiru.top/images/20211114105915.jpg">
+<meta property="article:published_time" content="2021-11-15T13:10:07.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:35:10.395Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/image-20211115211944186.png">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/5869fdc.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/5869fdc.html","path":"article/5869fdc.html","title":"通配符匹配—动态规划"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>通配符匹配—动态规划 | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%81%93%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">第一道题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">1.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%81%93%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">第二道题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">2.1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF-1"><span class="nav-number">2.2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81-1"><span class="nav-number">2.3.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">3.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/5869fdc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="通配符匹配—动态规划 | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          通配符匹配—动态规划
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2021-11-15 21:10:07" itemprop="dateCreated datePublished" datetime="2021-11-15T21:10:07+08:00">2021-11-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/5869fdc.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/5869fdc.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/5869fdc.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>今天要记的题目是关于动态规划的两道题，没错，两道题，因为很类似，所以就放一起记了</p>
+<p>相信很多人应该都有类似的感觉（卧槽，原来是这样的嘛？这递推公式也不怎么难嘛—做题前；额，，额，这递推公式咋想啊～—做题时）。动态规划，主要的在于当你拿到一道题时，要能想到使用动态规划（很多情况，我都是直接硬怼，递归走起，结果不是超时就是错误），其次是能够将问题的细节想明白，将流程中的一小步拿出来单独去看，最后，将这一小步写成递推公式</p>
+<img data-src="https://cdn.makiru.top/images/image-20211115211944186.png" alt="" style="zoom: 33%;" />
+
+<span id="more"></span>
+
+<h2 id="第一道题"><a href="#第一道题" class="headerlink" title="第一道题"></a>第一道题</h2><h3 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h3><p>给定一个字符串 (<code>s</code>) 和一个字符模式 (<code>p</code>) ，实现一个支持 <code>&#39;?&#39;</code> 和 <code>&#39;*&#39;</code> 的通配符匹配。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x27;?&#x27; 可以匹配任何单个字符。</span><br><span class="line">&#x27;*&#x27; 可以匹配任意字符串（包括空字符串）。</span><br></pre></td></tr></table></figure>
+
+<p>两个字符串<strong>完全匹配</strong>才算匹配成功。</p>
+<p><strong>说明:</strong></p>
+<ul>
+<li><code>s</code> 可能为空，且只包含从 <code>a-z</code> 的小写字母。</li>
+<li><code>p</code> 可能为空，且只包含从 <code>a-z</code> 的小写字母，以及字符 <code>?</code> 和 <code>*</code>。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入:</span><br><span class="line">s = &quot;aa&quot;</span><br><span class="line">p = &quot;a&quot;</span><br><span class="line">输出: false</span><br><span class="line">解释: &quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入:</span><br><span class="line">s = &quot;adceb&quot;</span><br><span class="line">p = &quot;*a*b&quot;</span><br><span class="line">输出: true</span><br><span class="line">解释: 第一个 &#x27;*&#x27; 可以匹配空字符串, 第二个 &#x27;*&#x27; 可以匹配字符串 &quot;dce&quot;.</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>首先看题，无非是字符串之间的匹配，只是加入了两种符号而已～</p>
+<p><strong>注意</strong>：为解释方便，都默认目前模式串的匹配位置为p[j]，即第j+1个字符（从1开始），主串的匹配位置为s[i]，在这两个位置前的均已匹配成功</p>
+<p>最直接的想法：分情况讨论（p[j]的分类）</p>
+<ul>
+<li>p[j]为a-z间的字符的时候，直接匹配即可，如果p[j] !&#x3D; s[i]，直接false，反之j++，i++</li>
+<li>p[j]为’?’符号的时候，表示可以匹配任何单个字符，因此，不用看，直接i++，j++</li>
+<li>p[j]为’*’符号的时候，表示<font color=red>可以匹配任何字符串</font>（注意：这里是与下一道题不同的地方），到这里，就属于比较麻烦的情况了，因为我们不知道这个符号代替的到底是什么？空串？单字符？还是多字符？都有可能，因此继续分情况讨论<ul>
+<li>如果是空串，就看p[j+1]与s[i]的关系</li>
+<li>如果是单字符呢，就直接看p[j+1]与s[i+1]的关系</li>
+<li>最麻烦的是多字符，这个时候，仔细想下，多字符？也就是说除了当前s[i]这个字符外，p[j]还会匹配s[i]后面的字符，所以就继续看p[j]与s[i+1]的关系</li>
+</ul>
+</li>
+</ul>
+<p>这就是最直接的思路，也就是递归的思路，不过这个思路中，存在大量的重复计算，导致无法AC，实际上，加上一个用来记忆判断过的下标组合就可以AC，这里就不贴代码了，因为这不是我想要记录的部分(&gt;^ω^&lt;)</p>
+<p>递归加记忆化可以通过的题，动态规划怎么可能不行呢？肯定是可以的，常规操作，构建dp数组，dp[i] [j]表示的是指p的前j个字符与s的前i个字符的匹配与否（注意：dp[2] [3]意思是p[2]与s[1]前面的匹配情况，包括p[2]和s[1]）</p>
+<p>数组定义好后，需要将一些边界关系设置好，比如，dp[0] [0] &#x3D; true，dp[?] [0] &#x3D; false (? &gt; 0)，dp[0] [?]则需要人为判断下，因为只有当p的前?个字符都是’*’才可以为true</p>
+<p>边界关系设置好后，就是递推公式的推导，这也是最烦的地方，一步步来看：</p>
+<ul>
+<li>当p[j]为a-z字符时，dp[i+1] [j+1] &#x3D; dp[i] [j] &amp;&amp; (p[j] &#x3D;&#x3D; s[i]) （这很容易懂吧～，就是说，是字符的话，就看p[j]和s[i]前面的匹配与否与p[j]，s[i]是否相等共同决定）</li>
+<li>当p[j]为’?’时，dp[i+1] [j+1] &#x3D; dp[i] [j]</li>
+<li>当p[j]为’*’时，也是比较麻烦，分情况讨论：<ul>
+<li>‘*’表示多字符时，dp[i+1] [j+1] &#x3D; dp[i] [j+1].   可以看出来，<font color=red>这里的想法和递归刚好是相反的，递归的时候，多字符我们是向后看的，但是这里，我们是往前看的，也就是说这个多字符包含的是前面的字符加上当前字符</font></li>
+<li>‘*’表示单字符时，dp[i+1] [j+1] &#x3D; dp[i] [j].</li>
+<li>‘*’表示空串时，dp[i+1] [j+1] &#x3D; dp[i+1] [j]</li>
+</ul>
+</li>
+</ul>
+<p>实际上，对’*’的分类可以更简单点，两种：使用与未使用，使用了的话，dp[i+1] [j+1] &#x3D; dp[i] [j+1]；没使用的话，dp[i+1] [j+1] &#x3D; dp[i+1] [j]</p>
+<p>可能到这，还是有点懵，没事，再简单点来说，首先明确一点，<font color=red>动态规划是根据前面的状态来考虑后面的状态</font>，因此，不用去想p[j]后面的匹配情况。假设我们使用了*号，那么我们是不是无法确定目前的s[i]是代表的多字符的最后一个？因此，需要查看s[i-1]的情况，也就是dp数组中的dp[i] [j+1]</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isMatch</span><span class="params">(String s, String p)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> s.length();</span><br><span class="line">    <span class="type">int</span> <span class="variable">len2</span> <span class="operator">=</span> p.length();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(len1==<span class="number">0</span> &amp;&amp; len2==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">boolean</span>[][] dp = <span class="keyword">new</span> <span class="title class_">boolean</span>[len1+<span class="number">1</span>][len2+<span class="number">1</span>];</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len2;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p.charAt(i-<span class="number">1</span>)==<span class="string">&#x27;*&#x27;</span>)&#123;</span><br><span class="line">            dp[<span class="number">0</span>][i] = <span class="literal">true</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=len2;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p.charAt(j-<span class="number">1</span>)==<span class="string">&#x27;?&#x27;</span>)&#123;</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(p.charAt(j-<span class="number">1</span>)==<span class="string">&#x27;*&#x27;</span>)&#123;</span><br><span class="line">                dp[i][j] = dp[i][j-<span class="number">1</span>] || dp[i-<span class="number">1</span>][j];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                dp[i][j] = (s.charAt(i-<span class="number">1</span>)==p.charAt(j-<span class="number">1</span>)) &amp;&amp; dp[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[len1][len2];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="第二道题"><a href="#第二道题" class="headerlink" title="第二道题"></a>第二道题</h2><h3 id="题目介绍-1"><a href="#题目介绍-1" class="headerlink" title="题目介绍"></a>题目介绍</h3><p>给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 ‘.’ 和 ‘*’ 的正则表达式匹配。</p>
+<ul>
+<li><code>&#39;.&#39;</code> 匹配任意单个字符</li>
+<li><code>&#39;*&#39;</code> 匹配零个或多个前面的那一个元素</li>
+</ul>
+<p>所谓匹配，是要涵盖 <strong>整个</strong> 字符串 <code>s</code>的，而不是部分字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;aa&quot; p = &quot;a&quot;</span><br><span class="line">输出：false</span><br><span class="line">解释：&quot;a&quot; 无法匹配 &quot;aa&quot; 整个字符串。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;aa&quot; p = &quot;a*&quot;</span><br><span class="line">输出：true</span><br><span class="line">解释：因为 &#x27;*&#x27; 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 &#x27;a&#x27;。因此，字符串 &quot;aa&quot; 可被视为 &#x27;a&#x27; 重复了一次。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;ab&quot; p = &quot;.*&quot;</span><br><span class="line">输出：true</span><br><span class="line">解释：&quot;.*&quot; 表示可匹配零个或多个（&#x27;*&#x27;）任意字符（&#x27;.&#x27;）。</span><br></pre></td></tr></table></figure>
+
+<p>老实说，就是第三个示例让我很迷糊～导致这道题我一直没做，直到把上面那道题做完了后才回去看的这道题</p>
+<h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>这道题肯定也是有很多思路的啦，比如递归啥的，，只是这里就只讲下动态规划的思路，便于我自己记忆（没错！！我自己～）</p>
+<p>与上面那道题的不同在于，这里的’*’号不是可以代替任意字符串的，它必须有个前缀字符，并且其作用是将前缀字符重复任意次，简单点来说，a *就是指可以表示空串，aa，aaa等</p>
+<p>那么，这会造成什么不一样的呢？其实区别也不是太大，往下看就知道了～</p>
+<p>首先构建dp数组，定义与上面那道题一样</p>
+<p>接着，边界有点变化，dp[0] [?]的判断不太一样，这里，如果希望是true，那么p必须类似于a * a* a*这种，而且？必须是 *号下标才可以，那这该怎么弄呢？别忘了，我们这是动态规划，是有前面的状态的，没错，dp[0] [i] 与dp[0] [i-2]是有关系的（当然，仅在p[i-1]为 * 号的时候）</p>
+<p>最后就是递推公式，大体上与上道题类似，只是些许不同</p>
+<ul>
+<li>当p[j] 为a-z字符时，dp[i+1] [j+1] &#x3D; dp[i] [j] &amp;&amp; (p[j] &#x3D;&#x3D; s[i])</li>
+<li>当p[j] 为 ‘.’时，dp[i+1] [j+1] &#x3D; dp[i] [j]</li>
+<li>当p[j] 为 ‘*’时，分类讨论：<ul>
+<li>使用了 *号：dp[i+1] [j+1] &#x3D; dp[i] [j+1].  (理由与上道题是相同的，当前s中的字符不一定是 *号代表的最后一个字符，我们不向后看)</li>
+<li>没使用 *号：dp[i+1] [j+1] &#x3D; dp[i+1] [j-1]  <font color=red>注意</font></li>
+</ul>
+</li>
+</ul>
+<p>标注的注意的地方，也就是与上道题不同所在，因为这里的 *号始终是与前面那个字符是绑定的，因此不用的话前面那个字符也被删掉，所以减了2</p>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isMatch</span><span class="params">(String s, String p)</span>&#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">len1</span> <span class="operator">=</span> s.length();</span><br><span class="line">    <span class="type">int</span> <span class="variable">len2</span> <span class="operator">=</span> p.length();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(len1==<span class="number">0</span> &amp;&amp; len2==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">boolean</span>[][] dp = <span class="keyword">new</span> <span class="title class_">boolean</span>[len1+<span class="number">1</span>][len2+<span class="number">1</span>];</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len2;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p.charAt(i-<span class="number">1</span>)==<span class="string">&#x27;*&#x27;</span>)&#123;</span><br><span class="line">            dp[<span class="number">0</span>][i] = dp[<span class="number">0</span>][i-<span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>;i&lt;=len1;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">1</span>;j&lt;=len2;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(p.charAt(j-<span class="number">1</span>)==<span class="string">&#x27;*&#x27;</span>)&#123;</span><br><span class="line">                  <span class="keyword">if</span>(p.charAt(j-<span class="number">2</span>)==s.charAt(i-<span class="number">1</span>) || p.charAt(j-<span class="number">2</span>)==<span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                      dp[i][j] = dp[i-<span class="number">1</span>][j] || dp[i][j-<span class="number">1</span>] || dp[i][j-<span class="number">2</span>];   <span class="comment">//匹配多字符  匹配一个字符  匹配空字符</span></span><br><span class="line">                  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                      dp[i][j] = dp[i][j-<span class="number">2</span>];</span><br><span class="line">                  &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(p.charAt(j-<span class="number">1</span>)==<span class="string">&#x27;.&#x27;</span>)&#123;</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                dp[i][j] = (p.charAt(j-<span class="number">1</span>)==s.charAt(i-<span class="number">1</span>)) &amp;&amp; dp[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[len1][len2];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>到这里，关于这两道动态规划的题就结束了，不过很大可能，下次遇到，我还是，，呵呵，你懂的</p>
+<p>至于番剧嘛，在追了在追了，对了，不得不吹下斗破的三年之约是真的好看（可能有人会说，好看，我看你只是馋女王的身子～）么的错！！好看的都是我老婆～</p>
+<img data-src="https://cdn.makiru.top/images/20211114105939.jpg" />
+
+<img data-src="https://cdn.makiru.top/images/20211114105915.jpg" />
+
+<p>我就问，这腰谁不喜欢～～～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag"><i class="fa fa-tag"></i> 动态规划</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/2968c150.html" rel="prev" title="再也不搞什么超分了～">
+                  <i class="fa fa-chevron-left"></i> 再也不搞什么超分了～
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/13291e9a.html" rel="next" title="区间问题">
+                  区间问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/5869fdc.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>

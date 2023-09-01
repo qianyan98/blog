@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/16x16.png">
+  <meta name="google-site-verification" content="ourjy49K8bGmYwkVrB1S29apLvvrObCSlkopsXOGGS4">
+  <meta name="baidu-site-verification" content="V2byCrExa2">
+
+<link rel="stylesheet" href="/blog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"makiru.top","root":"/blog/","images":"/blog/images","scheme":"Gemini","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"waline","storage":true,"lazyload":false,"nav":null,"activeClass":"waline"},"stickytabs":false,"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/blog/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/blog/js/config.js"></script>
+
+    <meta name="description" content="别再问我为啥这几天疯狂写博客了，其实上也算不上是写博客吧。一方面主要是想给自己增加点记忆，对大佬的做法能掌握的更熟点，理解的更透测点；另一方面是想给以后的自己看看以前的他是多么的傻 今天想讲的是一道关于查找有效括号的最长长度问题，说之前，我还是得吐槽一下我自己，为啥我这么笨，，这么多的题都不会写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="坑题—最长有效括号">
+<meta property="og:url" content="https://makiru.top/blog/article/62749c37.html">
+<meta property="og:site_name" content="瞳染の小窝">
+<meta property="og:description" content="别再问我为啥这几天疯狂写博客了，其实上也算不上是写博客吧。一方面主要是想给自己增加点记忆，对大佬的做法能掌握的更熟点，理解的更透测点；另一方面是想给以后的自己看看以前的他是多么的傻 今天想讲的是一道关于查找有效括号的最长长度问题，说之前，我还是得吐槽一下我自己，为啥我这么笨，，这么多的题都不会写">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211015190233378.jpeg">
+<meta property="og:image" content="https://cdn.makiru.top/images/image-20211015220123807.png">
+<meta property="article:published_time" content="2021-10-15T10:38:58.000Z">
+<meta property="article:modified_time" content="2023-05-02T06:32:13.098Z">
+<meta property="article:author" content="千颜">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.makiru.top/images/image-20211015190233378.jpeg">
+
+
+<link rel="canonical" href="https://makiru.top/blog/article/62749c37.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://makiru.top/blog/article/62749c37.html","path":"article/62749c37.html","title":"坑题—最长有效括号"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>坑题—最长有效括号 | 瞳染の小窝</title>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EMZL1WCR91"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EMZL1WCR91');
+</script>
+  <script src="/blog/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?fefff6289c2a83569227909824e83e29"></script>
+
+
+
+<link rel="dns-prefetch" href="https://waline.makiru.top">
+<script async defer data-website-id="b5062a8e-4252-4910-bf18-accacda5297a" src="https://umami.makiru.top/script.js"></script>
+
+<script src="https://cdn.makiru.top/js/jquery.min.js"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/blog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/blog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">瞳染の小窝</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/blog/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/blog/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/blog/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/blog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-guestbook"><a href="/blog/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>唠唠叨叨</a></li><li class="menu-item menu-item-game"><a href="/blog/game/" rel="section"><i class="fa fa-gamepad fa-fw"></i>游戏</a></li><li class="menu-item menu-item-links"><a href="/blog/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li><li class="menu-item menu-item-about"><a href="/blog/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-navigation"><a href="https://makiru.top/" rel="section"><i class="fa fa-compass fa-fw"></i>导航</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">题目介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">我的思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E4%BD%AC%E6%80%9D%E8%B7%AF1"><span class="nav-number">3.</span> <span class="nav-text">大佬思路1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E4%BD%AC%E6%80%9D%E8%B7%AF2"><span class="nav-number">4.</span> <span class="nav-text">大佬思路2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E4%BD%AC%E6%80%9D%E8%B7%AF3"><span class="nav-number">5.</span> <span class="nav-text">大佬思路3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">6.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="千颜"
+      src="/blog/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">千颜</p>
+  <div class="site-description" itemprop="description">时崎狂三和青山七海都是我老婆！！！</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/blog/archives/">
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/blog/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/blog/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/qianyan98" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;qianyan98" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3406128464a@gmail.com" title="E-Mail → mailto:3406128464a@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/qianyan666" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;qianyan666" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      私人链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://waline.makiru.top/ui" title="https:&#x2F;&#x2F;waline.makiru.top&#x2F;ui" rel="noopener" target="_blank">评论管理</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://console.upyun.com/dashboard/" title="https:&#x2F;&#x2F;console.upyun.com&#x2F;dashboard&#x2F;" rel="noopener" target="_blank">我的图床</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://makiru.top/blog/article/62749c37.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/blog/images/avatar.jpg">
+      <meta itemprop="name" content="千颜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞳染の小窝">
+      <meta itemprop="description" content="时崎狂三和青山七海都是我老婆！！！">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="坑题—最长有效括号 | 瞳染の小窝">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          坑题—最长有效括号
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发布:</span>
+
+      <time title="创建时间：2021-10-15 18:38:58" itemprop="dateCreated datePublished" datetime="2021-10-15T18:38:58+08:00">2021-10-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类:</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/blog/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">评论次数：</span>
+  
+    <a title="waline" href="/blog/article/62749c37.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/blog/article/62749c37.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-item" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="waline-pageview-count" data-path="/blog/article/62749c37.html"></span>
+    </span>
+  
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.2k</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>别再问我为啥这几天疯狂写博客了，其实上也算不上是写博客吧。一方面主要是想给自己增加点记忆，对大佬的做法能掌握的更熟点，理解的更透测点；另一方面是想给以后的自己看看以前的他是多么的傻</p>
+<p>今天想讲的是一道关于查找有效括号的最长长度问题，说之前，我还是得吐槽一下我自己，为啥我这么笨，，这么多的题都不会写</p>
+<img data-src="https://cdn.makiru.top/images/image-20211015190233378.jpeg" alt="" style="zoom: 33%;" />
+
+<span id="more"></span>
+
+<h3 id="题目介绍"><a href="#题目介绍" class="headerlink" title="题目介绍"></a>题目介绍</h3><p>给定一个只包含’(‘和’)’的字符串，找出最长有效的括号子串长度（必须连续，格式正确）</p>
+<p>举例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;(()&quot;</span><br><span class="line">输出：2</span><br><span class="line">解释：最长有效括号子串是 &quot;()&quot;</span><br><span class="line"></span><br><span class="line">输入：s = &quot;)()())&quot;</span><br><span class="line">输出：4</span><br><span class="line">解释：最长有效括号子串是 &quot;()()&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="我的思路"><a href="#我的思路" class="headerlink" title="我的思路"></a>我的思路</h3><p>一开始，我看这题竟然还是个困难题，心想，我去，现在困难题都这么简单了么，直接上手就是一顿操作，提交，结果傻眼了。后来仔细一看，原来我写的是求有效括号数（想撞墙）。</p>
+<p>接着，就是直线思路：既然是跟括号有关，那肯定逃不了栈的使用啊，接着就是噩梦的起点，我一直尝试将字符串中的字符，是(就入栈，)则讨论分析，一眼看起来也没啥问题对吧，正常人不都这么想的嘛（可能世界上就我一个不正常人）。但是对于是)的情况我怎么都分析不出来，首先，)肯定是需要将栈顶的(弹出，并且计数，但是怎么判断是最大的长度呢？栈空就是嘛？显然不行，因为可能栈永远也没法空，只要第一个是(且无法匹配就行。</p>
+<p>既然这样，又该怎么办呢？那就直接判断栈要么为空或者栈底为(时，就将目前的计数和之前的最大值中选择一个赋给最大值；接着，又出现了一个问题，字符串中间出现)无法匹配怎么办，这时计数肯定是需要暂停的，从无法匹配的字符下一个字符继续（但是事实上，这是没法判断的，<font color="red">因为我们对)字符的处理是不入栈，只是和栈顶比较</font>&gt;）</p>
+<p>所以说，目前的问题就是：存在不匹配的(，肯定会在栈底累积，不匹配的)无法处理，判断倒是可以，直接利用当前栈顶是否存在(即可，没有表示无法匹配（写到这里，我竟然还对自己的思路抱有侥幸心理，又去试了一次）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">longestValidParentheses</span><span class="params">(String s)</span>&#123;</span><br><span class="line">    <span class="type">char</span>[] s1 = s.toCharArray();</span><br><span class="line">    <span class="keyword">if</span>(s==<span class="literal">null</span> || s.length()==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Stack&lt;Character&gt; stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">    stack.push(<span class="string">&#x27;#&#x27;</span>);</span><br><span class="line">    <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;s1.length;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s1[i]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">            stack.push(s1[i]);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            stack.pop();</span><br><span class="line">            <span class="keyword">if</span>(stack.empty())&#123;</span><br><span class="line">                stack.push(s1[i]);    <span class="comment">//表示是未匹配成功的右括号</span></span><br><span class="line">                max = <span class="number">0</span>;</span><br><span class="line">                </span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                max += <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span>(max&gt;ans)&#123;</span><br><span class="line">                    ans = max;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果发现，，我对无法匹配的左括号没法处理，因为我无法判断一个左括号是否能被匹配，以至于我不知道代码里的max在栈内还有左括号的时候该不该赋为0（进行下一轮计数，被隔断了）</p>
+<p>于是，我针对左括号无法判断是否可以匹配这个问题，使出了大招，没错，就是再写个函数用来判断从当前i（左括号）处，向后遍历，用一个新的栈操作（懂了吧，不懂？看代码）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(s1[i]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">    stack.push(s1[i]);</span><br><span class="line">    <span class="comment">//判断左括号是否能被匹配</span></span><br><span class="line">    <span class="keyword">if</span>(!left_is_ok(s1,i))&#123;</span><br><span class="line">      max = <span class="number">0</span>;</span><br><span class="line">    &#125;<span class="comment">//无法匹配</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">left_is_ok</span><span class="params">(<span class="type">char</span>[] s, <span class="type">int</span> k)</span>&#123;</span><br><span class="line">  Stack&lt;Character&gt; stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i=k;i&lt;s.length;i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(s[i]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">      stack.push(s[i]);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      stack.pop();</span><br><span class="line">      <span class="keyword">if</span>(stack.empty())&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>懂了吧。。。。</p>
+<p>虽然是通过了，但是，，结果却惨不忍睹：</p>
+<img data-src="https://cdn.makiru.top/images/image-20211015220123807.png" alt="" style="zoom:50%;" />
+
+<p>（各路大佬别笑）</p>
+<h3 id="大佬思路1"><a href="#大佬思路1" class="headerlink" title="大佬思路1"></a>大佬思路1</h3><p>依旧是利用栈，但是这个栈里存的不是s中的左右括号，而是括号的下标，这样就可以直接利用下标值计算长度了，说再多不如举个例子：</p>
+<p>首先先初始化栈，需要在栈底添加一个可以区别任何其他字符的下标（-1），这样做的原因是因为在匹配中如果存在右括号不匹配，意思就是说栈里没有左括号与其匹配了，那接下来后面的子串里的有效序列我们就没法计算长度了（因为这个有效子串的开始下标是多少我们没有记录—开始下标也就是无法匹配的右括号下标），注意：<font color=red>一般的右括号我们是绝对不入栈的，只有无法匹配的才会入栈</font></p>
+<p>比如说：(()))()，下标4的)则无法匹配，执行流程如下：</p>
+<p> (：0入栈</p>
+<p>(：1入栈</p>
+<p>)：2，栈顶出栈，计算长度max &#x3D; 当前的i减去栈顶index(注意，不是刚才出栈的，是出栈后的栈顶) &#x3D; 2</p>
+<p>)：3，栈顶出栈，计算长度max，这时发现栈空了，因此我们需要在栈底初始化时放个-1，这样，max &#x3D; 3 - (-1) &#x3D; 4 </p>
+<p>)：4，栈顶出栈（此刻栈里只有个-1，因此出栈），发现栈底是空的，表示这个右括号无法匹配，所以直接将该右括号的4 入栈代替之前的-1</p>
+<p>(：5，入栈</p>
+<p>)：6，出栈（此刻栈里只有4），计算max &#x3D; Math.max(max,6-4) &#x3D; 4</p>
+<p>具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">longestValidParentheses</span><span class="params">(String s)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s==<span class="literal">null</span> || s.equals(<span class="string">&quot;&quot;</span>) || s.length()==<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">char</span>[] s1 = s.toCharArray();</span><br><span class="line">    Stack&lt;Integer&gt; stack = <span class="keyword">new</span> <span class="title class_">Stack</span>&lt;&gt;();</span><br><span class="line">    <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    stack.push(-<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;s1.length;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s1[i]==<span class="string">&#x27;(&#x27;</span>) &#123;</span><br><span class="line">            stack.push(i);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            stack.pop();</span><br><span class="line">            <span class="keyword">if</span>(stack.empty())&#123;</span><br><span class="line">                stack.push(i);      <span class="comment">//表示只有右边，永远不会被匹配到</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                max = Math.max(max, i - stack.peek());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个思路里，比较精彩的地方有：在栈底一开始放个-1，用来判断右括号的无法匹配，只有当栈里只有-1，且当前字符是)，出栈才会造成栈空，这时便让这个)的下标代替-1，继续判断其他右括号，同时可以用来计算这个无法匹配)后面的子串里的有效括号长度（作为开头）</p>
+<h3 id="大佬思路2"><a href="#大佬思路2" class="headerlink" title="大佬思路2"></a>大佬思路2</h3><p>这个思路，怎么说呢，真的是很难想到，如果我不是看了解析，我可能想破头也不会往这方面去想</p>
+<p>思路大概上是这样的，将无法匹配的字符全部标记为1，能匹配的全部标记为0（利用栈很容易实现），标记完后，就是计算最长的0序列的长度</p>
+<p>至于，代码就靠大家自己去写啦</p>
+<h3 id="大佬思路3"><a href="#大佬思路3" class="headerlink" title="大佬思路3"></a>大佬思路3</h3><p>看了这个大佬的思路后，我才发现原来这是一道dp问题，气的我啊，都想撞墙</p>
+<p>首先定义dp数组，dp[i]表示以下标为i的字符结尾的有效括号的最长长度（注意理解，举个例子，())，这里的i&#x3D;2时，dp[2]&#x3D;0）</p>
+<p>遍历s字符串 </p>
+<ol>
+<li>如果当前字符为(，则直接dp设置为0</li>
+<li>如果为)，则需要判断；如果i-1为(，则刚好可以与i处的)匹配，则dp[i] &#x3D;     dp[i-2] + 2；如果i-1为)，则需要往前查找，假设i应该匹配的位置是j，则j &#x3D;     i-1-dp[i-1]，如果j处为)，则直接dp[i] &#x3D; 0，否则，dp[i] &#x3D;     dp[j-1] + dp[i-1] + 2</li>
+</ol>
+<p>具体的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">longestValidParentheses</span><span class="params">(String s)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(s.length()==<span class="number">0</span> || s.length()==<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span>[] dp = <span class="keyword">new</span> <span class="title class_">int</span>[s.length()];</span><br><span class="line">    Arrays.fill(dp,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span>[] s1 = s.toCharArray();</span><br><span class="line">    <span class="keyword">if</span>(s1[<span class="number">1</span>]==<span class="string">&#x27;)&#x27;</span> &amp;&amp; s1[<span class="number">0</span>]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">        dp[<span class="number">1</span>] = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">2</span>;i&lt;s.length();i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(s1[i]==<span class="string">&#x27;)&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">//判断s1[i-1]</span></span><br><span class="line">            <span class="keyword">if</span>(s1[i-<span class="number">1</span>]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">                dp[i] = dp[i-<span class="number">2</span>] + <span class="number">2</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i - <span class="number">1</span> - dp[i-<span class="number">1</span>];</span><br><span class="line">                <span class="keyword">if</span>(j&gt;<span class="number">0</span> &amp;&amp; s1[j]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">                    dp[i] = dp[j-<span class="number">1</span>] + dp[i-<span class="number">1</span>] + <span class="number">2</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(j==<span class="number">0</span> &amp;&amp; s1[j]==<span class="string">&#x27;(&#x27;</span>)&#123;</span><br><span class="line">                    dp[i] = dp[i-<span class="number">1</span>] + <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;dp.length;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(dp[i]&gt;ans)&#123;</span><br><span class="line">            ans = dp[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>唉，难受啊，每次都能在评论区看到和我同病相怜的，怀疑自己的脑袋是怎么长的，希望下一次的博客是很久之后了（并且会是一部关于番剧的文章）</p>
+<p>偷偷的告诉你们，，，我最近在追番哦，名字嘛，“女神宿舍的宿管君”以及“进化果实～不知不觉踏上胜利的人生～”，等看完了就写，别急～</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/blog/tags/%E7%AE%97%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/blog/article/44658eea.html" rel="prev" title="串联所有单词的子串">
+                  <i class="fa fa-chevron-left"></i> 串联所有单词的子串
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/blog/article/78ec962b.html" rel="next" title="二分法那点事～">
+                  二分法那点事～ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">皖ICP备19019405号-2 </a>
+  </div>
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千颜</span>
+</div><div class="footer-support">
+    <span>小破站由</span>
+    <a class="footer-support-logo" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank" title="又拍云" style="border-bottom: none;">
+        <img height="30" src="https://cdn.makiru.top/images/upyun-logo.png" alt="又拍云">
+    </a>
+    <span>提供 CDN 加速</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/blog/js/comments.js"></script><script src="/blog/js/utils.js"></script><script src="/blog/js/next-boot.js"></script><script src="/blog/js/pjax.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/blog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/blog/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://waline.makiru.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":true,"avatar":"monsterid","meta":["nick","mail"],"requiredMeta":[],"pageSize":10,"comment":true,"emoji":["https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/weibo","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/bilibili","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/alus","https://cdn.jsdelivr.net/gh/qianyan98/CDN@1.0/emojis/qq"],"login":"enable","locale":{"placeholder":"评论已开启审核，随便说点什么喵～o(=•ェ•=)m","nick":"昵称","mail":"邮箱"},"copyright":false,"dark":"auto","el":"#waline","libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","path":"/blog/article/62749c37.html"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+<script data-pjax type="text/javascript">
+  //jquery selector
+  var $linkList = $(".link-list");
+  if ($linkList.length != 0) {
+    var j = -1;
+    for	(var i = 0; i < $linkList.length; i++) {
+      const listPath = $linkList[i].getAttribute('json-src');
+      const iconPath = $linkList[i].getAttribute('icon-src');
+      //使用 getJSON 读取 JSON 文件中的数据
+      $.getJSON(listPath, function(data) {
+        j++;
+        //存储数据的变量 
+        var li = "";
+        //清空内容 
+        $linkList.eq(j).empty();
+        //将获取到的 json 格式数据遍历到 div 中
+        $.each(data, function(infoIndex, info) {
+          var labelWarn = '';
+          var labelInfo = '';
+          if (info['warn']) { 
+            labelWarn = '<span class="label warn">' + info['warn'] + '</span>';
+          }
+          if (info['info']) { 
+            labelInfo = '<span class="label info">' + info['info'] + '</span>';
+          }
+          li += '<div class="link-list-container">';
+          li += '<img class="link-list-image" src="' + iconPath + info['logo'] + '">';
+          li += '<p>' + info['title'] + labelInfo + labelWarn + '</p>';
+          li += '<p>' + info['intro'] + '</p>';
+          li += '<a href="' + info['url'] + '" rel="noopener" target="_blank" data-pjax-state=""></a>';
+          li += '</div>';
+        })
+        //显示处理后的数据 
+        $linkList.eq(j).html(li);
+      })
+    }
+  }
+</script>
+
+
+
+<script src="/blog/live2d/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2d/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"display":{"position":"left"},"mobile":{"show":false},"model":{"scale":1,"jsonPath":"/blog/live2d/assets/umaru.model.json"},"log":false});</script></body>
+</html>
